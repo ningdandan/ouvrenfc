@@ -17,9 +17,9 @@ type LinkRecord = {
 export default async function LinkPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
 
   if (!VALID_ID_REGEX.test(id)) {
     notFound();
