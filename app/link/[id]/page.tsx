@@ -17,16 +17,37 @@ type LinkRecord = {
 export default async function LinkPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
 
   if (!VALID_ID_REGEX.test(id)) {
     notFound();
   }
 
-  const raw = await kv.get<LinkRecord | null>(`link:${id}`);
-  const hasData = raw != null && (raw.pin != null || (raw.links?.length ?? 0) > 0);
+  let raw: LinkRecord | null = null;
+  let kvError = false;
+
+  try {
+    raw = await kv.get<LinkRecord | null>(`link:${id}`);
+  } catch {
+    kvError = true;
+  }
+
+  const hasData =
+    !kvError && raw != null && (raw.pin != null || (raw.links?.length ?? 0) > 0);
+
+  if (kvError) {
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-[420px] mx-auto flex flex-col min-h-[540px] items-center justify-center">
+          <p className="text-sm text-black drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]">
+            Error loading this chip. Please try again later.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-8">
@@ -35,7 +56,7 @@ export default async function LinkPage({
         {!hasData && <InitializeChip id={id} />}
 
         {/* State B / C: 已激活，公有视图 & Owner/管理视图由 LinkView 内部切换 */}
-        {hasData && <LinkView id={id} links={raw?.links ?? []} />}
+        {hasData && raw && <LinkView id={id} links={raw.links ?? []} />}
       </div>
     </main>
   );
