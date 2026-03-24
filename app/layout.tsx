@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Pixelify_Sans } from "next/font/google";
 import "./globals.css";
+import { NetworkToast } from "./network-toast";
 
 const pixelify = Pixelify_Sans({
   subsets: ["latin"],
@@ -20,7 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${pixelify.variable} text-black`}>
-      <body className="min-h-screen antialiased bg-[url('/bg.png')] bg-cover bg-center font-[family-name:var(--font-pixelify)]">
+      <body className="min-h-screen antialiased bg-[url('/bg.webp')] bg-cover bg-center font-[family-name:var(--font-pixelify)]">
+        <NetworkToast />
         {children}
       </body>
     </html>

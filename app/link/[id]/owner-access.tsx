@@ -4,22 +4,35 @@ import { useState, useTransition } from "react";
 import { verifyOwner } from "../actions";
 import { AdminPanel } from "./admin-panel";
 import type { SocialLink } from "../types";
+import { getErrorMessage, isRetryableError } from "../error-map";
+import { usePendingTimeout } from "@/hooks/usePendingTimeout";
 
 type Props = {
   id: string;
   initialLinks: SocialLink[];
   onDone?: () => void;
+  initialVerifiedPin?: string;
+  firstInitMode?: boolean;
 };
 
-export function OwnerAccess({ id, initialLinks, onDone }: Props) {
+export function OwnerAccess({
+  id,
+  initialLinks,
+  onDone,
+  initialVerifiedPin,
+  firstInitMode = false,
+}: Props) {
   const [pin, setPin] = useState("");
-  const [verifiedPin, setVerifiedPin] = useState<string | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [verifiedPin, setVerifiedPin] = useState<string | null>(
+    initialVerifiedPin ?? null,
+  );
+  const [isAdmin, setIsAdmin] = useState(Boolean(initialVerifiedPin));
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const isTimedOut = usePendingTimeout(isPending, 10000);
 
   const handleVerify = () => {
-    if (pin.length !== 3 || isPending) return;
+    if (pin.length !== 3 || (isPending && !isTimedOut)) return;
     setError(null);
     const pinToVerify = pin;
     startTransition(async () => {
@@ -30,7 +43,11 @@ export function OwnerAccess({ id, initialLinks, onDone }: Props) {
         setPin("");
         setError(null);
       } else {
-        setError(result.error ?? "Invalid PIN.");
+        const message = getErrorMessage(result.code, result.error);
+        const nextError = isRetryableError(result.code)
+          ? `${message} Please retry.`
+          : message;
+        setError(nextError);
       }
     });
   };
@@ -41,6 +58,7 @@ export function OwnerAccess({ id, initialLinks, onDone }: Props) {
         id={id}
         pin={verifiedPin}
         initialLinks={initialLinks}
+        firstInitMode={firstInitMode}
         onSaved={onDone}
       />
     );
@@ -61,6 +79,11 @@ export function OwnerAccess({ id, initialLinks, onDone }: Props) {
               {error}
             </p>
           )}
+          {isTimedOut && (
+            <p className="text-xs text-[#ff4d4d] drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]">
+              Request is taking too long. You can retry now.
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-3 gap-1 mt-2">
@@ -69,12 +92,12 @@ export function OwnerAccess({ id, initialLinks, onDone }: Props) {
               key={n}
               type="button"
               onClick={() => {
-                if (pin.length >= 3 || isPending) return;
+                if (pin.length >= 3 || (isPending && !isTimedOut)) return;
                 const next = (pin + String(n)).slice(0, 3);
                 setPin(next);
                 setError(null);
               }}
-              disabled={isPending || pin.length === 3}
+              disabled={(isPending && !isTimedOut) || pin.length === 3}
               className="w-16 h-16 bg-[url('/button_round.png')] bg-contain bg-center bg-no-repeat flex items-center justify-center text-lg text-black active:scale-95 transition-transform disabled:opacity-60"
             >
               {n}
@@ -84,12 +107,12 @@ export function OwnerAccess({ id, initialLinks, onDone }: Props) {
           <button
             type="button"
             onClick={() => {
-              if (pin.length >= 3 || isPending) return;
+              if (pin.length >= 3 || (isPending && !isTimedOut)) return;
               const next = (pin + "0").slice(0, 3);
               setPin(next);
               setError(null);
             }}
-            disabled={isPending || pin.length === 3}
+            disabled={(isPending && !isTimedOut) || pin.length === 3}
             className="w-16 h-16 bg-[url('/button_round.png')] bg-contain bg-center bg-no-repeat flex items-center justify-center text-lg text-black active:scale-95 transition-transform disabled:opacity-60"
           >
             0
@@ -97,11 +120,11 @@ export function OwnerAccess({ id, initialLinks, onDone }: Props) {
           <button
             type="button"
             onClick={() => {
-              if (isPending) return;
+              if (isPending && !isTimedOut) return;
               setPin((prev) => prev.slice(0, -1));
               setError(null);
             }}
-            disabled={isPending || pin.length === 0}
+            disabled={(isPending && !isTimedOut) || pin.length === 0}
             className="w-16 h-16 flex items-center justify-center text-sm text-black active:scale-95 transition-transform disabled:opacity-40"
           >
             DEL
@@ -111,10 +134,10 @@ export function OwnerAccess({ id, initialLinks, onDone }: Props) {
         <button
           type="button"
           onClick={handleVerify}
-          disabled={pin.length !== 3 || isPending}
+          disabled={pin.length !== 3 || (isPending && !isTimedOut)}
           className="mt-4 min-h-[48px] px-8 text-sm uppercase tracking-wider text-black active:scale-95 transition-transform"
         >
-          {isPending ? "Checking…" : "Next"}
+          {isPending && !isTimedOut ? "Checking…" : "Next"}
         </button>
       </div>
     </section>

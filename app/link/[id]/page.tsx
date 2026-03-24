@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { kv } from "@vercel/kv";
-import { InitializeChip } from "./initialize-chip";
-import { LinkView } from "./link-view";
+import { ResilientViewer } from "./resilient-viewer";
 import type { SocialLink } from "../types";
 
 // Strict route: id must be 00001–00100 (5-digit string)
@@ -16,10 +15,14 @@ type LinkRecord = {
 
 export default async function LinkPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams?: Promise<{ firstInit?: string }>;
 }) {
   const { id } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const firstInit = resolvedSearchParams?.firstInit === "1";
 
   if (!VALID_ID_REGEX.test(id)) {
     notFound();
@@ -37,26 +40,16 @@ export default async function LinkPage({
   const hasData =
     !kvError && raw != null && (raw.pin != null || (raw.links?.length ?? 0) > 0);
 
-  if (kvError) {
-    return (
-      <main className="min-h-screen flex items-center justify-center px-4 py-8">
-        <div className="w-full max-w-[420px] mx-auto flex flex-col min-h-[540px] items-center justify-center">
-          <p className="text-sm text-black drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]">
-            Error loading this chip. Please try again later.
-          </p>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-[420px] mx-auto flex flex-col min-h-[540px]">
-        {/* State A: Unactivated — no KV data */}
-        {!hasData && <InitializeChip id={id} />}
-
-        {/* State B / C: 已激活，公有视图 & Owner/管理视图由 LinkView 内部切换 */}
-        {hasData && raw && <LinkView id={id} links={raw.links ?? []} />}
+        <ResilientViewer
+          id={id}
+          links={raw?.links ?? []}
+          hasData={hasData}
+          loadError={kvError}
+          firstInit={firstInit}
+        />
       </div>
     </main>
   );

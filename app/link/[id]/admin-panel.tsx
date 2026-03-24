@@ -7,24 +7,42 @@ import { updateSocialLinks } from "../actions";
 import { getSocialImage } from "../social-icons";
 import { getSocialHref } from "../social-url";
 import { SOCIAL_TYPES, type SocialLink } from "../types";
+import { getErrorMessage, isRetryableError } from "../error-map";
+import { usePendingTimeout } from "@/hooks/usePendingTimeout";
 
 type Props = {
   id: string;
   pin: string;
   initialLinks: SocialLink[];
   onSaved?: () => void;
+  firstInitMode?: boolean;
 };
 
-export function AdminPanel({ id, pin, initialLinks, onSaved }: Props) {
+export function AdminPanel({
+  id,
+  pin,
+  initialLinks,
+  onSaved,
+  firstInitMode = false,
+}: Props) {
   const router = useRouter();
   const headerLink = initialLinks.find((l) => l.type === "header");
+  const initialSocialLinks = initialLinks.filter((l) => l.type !== "header");
+  const defaultFirstInitLinks: SocialLink[] = [
+    { type: "instagram", value: "" },
+    { type: "phone", value: "" },
+    { type: "website", value: "" },
+  ];
   const [header, setHeader] = useState<string>(headerLink?.value ?? "");
   const [links, setLinks] = useState<SocialLink[]>(
-    initialLinks.filter((l) => l.type !== "header"),
+    firstInitMode && initialSocialLinks.length === 0
+      ? defaultFirstInitLinks
+      : initialSocialLinks,
   );
   const [saveToast, setSaveToast] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSaving, startSave] = useTransition();
+  const isTimedOut = usePendingTimeout(isSaving, 10000);
 
   const handleRemove = (index: number) => {
     setLinks((prev) => prev.filter((_, i) => i !== index));
@@ -62,7 +80,11 @@ export function AdminPanel({ id, pin, initialLinks, onSaved }: Props) {
     startSave(async () => {
       const result = await updateSocialLinks(id, pin, payload);
       if (!result.success) {
-        setError(result.error);
+        const message = getErrorMessage(result.code, result.error);
+        const nextError = isRetryableError(result.code)
+          ? `${message} Please retry.`
+          : message;
+        setError(nextError);
         return;
       }
 
@@ -173,15 +195,20 @@ export function AdminPanel({ id, pin, initialLinks, onSaved }: Props) {
           {error}
         </p>
       )}
+      {isTimedOut && (
+        <p className="text-xs text-[#8b0000] text-center">
+          Save is taking too long. You can retry now.
+        </p>
+      )}
 
       {/* Save 按钮 */}
       <button
         type="button"
         onClick={handleSave}
-        disabled={isSaving}
+        disabled={isSaving && !isTimedOut}
         className="mt-auto w-full min-h-[56px] flex items-center justify-center text-lg text-black tracking-widest active:scale-95 transition-transform disabled:opacity-60"
       >
-        {isSaving ? "Saving…" : saveToast ? "Saved" : "Save"}
+        {isSaving && !isTimedOut ? "Saving…" : saveToast ? "Saved" : "Save"}
       </button>
     </section>
   );

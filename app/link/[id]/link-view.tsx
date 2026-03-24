@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { OwnerAccess } from "./owner-access";
 import { getSocialImage } from "../social-icons";
 import { getSocialHref } from "../social-url";
@@ -9,12 +10,26 @@ import type { SocialLink } from "../types";
 type Props = {
   id: string;
   links: SocialLink[];
+  firstInit?: boolean;
 };
 
 type Mode = "public" | "owner";
 
-export function LinkView({ id, links }: Props) {
+export function LinkView({ id, links, firstInit = false }: Props) {
+  const router = useRouter();
   const [mode, setMode] = useState<Mode>("public");
+  const [firstInitPin, setFirstInitPin] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!firstInit || typeof window === "undefined") return;
+    const key = `first-init-pin:${id}`;
+    const savedPin = window.sessionStorage.getItem(key);
+    window.sessionStorage.removeItem(key);
+    if (savedPin && /^\d{3}$/.test(savedPin)) {
+      setFirstInitPin(savedPin);
+      setMode("owner");
+    }
+  }, [firstInit, id]);
 
   const header = links.find((l) => l.type === "header")?.value?.trim() ?? "";
   const socialLinks = links.filter((l) => l.type !== "header");
@@ -38,7 +53,17 @@ export function LinkView({ id, links }: Props) {
         <OwnerAccess
           id={id}
           initialLinks={links}
-          onDone={() => setMode("public")}
+          initialVerifiedPin={firstInitPin ?? undefined}
+          firstInitMode={firstInit || Boolean(firstInitPin)}
+          onDone={() => {
+            if (firstInit) {
+              setFirstInitPin(null);
+              setMode("public");
+              router.replace(`/link/${id}`);
+              return;
+            }
+            setMode("public");
+          }}
         />
       </div>
     );
