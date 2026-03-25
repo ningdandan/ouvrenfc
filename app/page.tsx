@@ -1,10 +1,24 @@
+"use client";
+
+import { BackroomShell } from "@/skins/backroom";
+import { OuvreBackroomBackground } from "@/skins/ouvre-backroom-background";
+
 export default function HomePage() {
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 py-8">
-      <h1 className="text-3xl text-black drop-shadow-[0_0_6px_rgba(255,255,255,0.9)]">
-        hello world
-      </h1>
-    </main>
+    <BackroomShell>
+      <section className="relative flex-1 flex flex-col items-center justify-center gap-16 p-6 overflow-hidden">
+        <OuvreBackroomBackground />
+
+        <div className="absolute z-10 left-1/2 top-[75%] -translate-x-1/2 flex flex-col items-center">
+          <a
+            href="https://www.ouvre.nyc"
+            className="text-2xl tracking-[0.2em] text-black active:scale-95 transition-transform"
+          >
+            start ouvre
+          </a>
+        </div>
+      </section>
+    </BackroomShell>
   );
 }
 

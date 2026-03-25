@@ -18,8 +18,8 @@ export function EvaSkin({ id, links, onRequestEdit }: SkinProps) {
   const rows = links.filter((l) => l.type !== "header").slice(0, 6);
 
   return (
-    <div className="skin-eva min-h-[100svh] min-h-dvh w-full flex flex-col antialiased">
-      <div className="w-full max-w-[420px] mx-auto flex flex-1 flex-col relative min-h-[540px]">
+    <div className="skin-eva h-[100svh] h-dvh w-full flex flex-col antialiased overflow-hidden">
+      <div className="w-full max-w-[420px] mx-auto flex flex-1 flex-col relative overflow-hidden">
 
         {/* TV static noise layers */}
         <div className="eva-tv-static-overlay" />
@@ -161,7 +161,9 @@ export function EvaSkin({ id, links, onRequestEdit }: SkinProps) {
         </div>
 
         {/* ── Main content ── */}
-        <div className="relative z-10 w-full h-full p-4 flex flex-col pt-24 pb-28 overflow-hidden" style={{ transform: "translateY(10%)" }}>
+        <div className="relative z-10 w-full h-full p-4 flex flex-col pt-24 pb-28 overflow-hidden"
+          style={{ transform: "translateY(10%)" }}
+        >
 
           {/* Top status bar */}
           <div className="absolute top-8 left-4 right-4 z-20 flex justify-between items-start text-[10px] tracking-wider pointer-events-none">
