@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ensure mobile Safari never shows white edges if a child container
+   doesn't perfectly fill the viewport. */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+
 @keyframes shake {
   0% {
     transform: translateX(0);

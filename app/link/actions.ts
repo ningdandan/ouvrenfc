@@ -31,9 +31,9 @@ function mapKvError(error: unknown): { error: string; code: ActionErrorCode } {
   return { error: "Network or server issue. Please try again.", code: "INTERNAL_ERROR" };
 }
 
-export async function activateChip(id: string, pin: string): Promise<ActivateResult> {
+export async function activateOuvre(id: string, pin: string): Promise<ActivateResult> {
   if (!VALID_ID_REGEX.test(id)) {
-    return failure("Invalid chip ID.", "INVALID_INPUT");
+    return failure("Invalid ouvre ID.", "INVALID_INPUT");
   }
   if (!PIN_REGEX.test(pin)) {
     return failure("PIN must be exactly 3 digits.", "INVALID_INPUT");
@@ -43,7 +43,7 @@ export async function activateChip(id: string, pin: string): Promise<ActivateRes
     const key = `link:${id}`;
     const existing = await kv.get<LinkRecord | null>(key);
     if (existing != null) {
-      return failure("Chip already activated.", "ALREADY_EXISTS");
+      return failure("Ouvre already activated.", "ALREADY_EXISTS");
     }
 
     await kv.set(key, { pin, links: [] });
@@ -57,7 +57,7 @@ export async function activateChip(id: string, pin: string): Promise<ActivateRes
 
 export async function verifyOwner(id: string, pin: string): Promise<VerifyResult> {
   if (!VALID_ID_REGEX.test(id)) {
-    return failure("Invalid chip ID.", "INVALID_INPUT");
+    return failure("Invalid ouvre ID.", "INVALID_INPUT");
   }
   if (!PIN_REGEX.test(pin)) {
     return failure("PIN must be exactly 3 digits.", "INVALID_INPUT");
@@ -67,7 +67,7 @@ export async function verifyOwner(id: string, pin: string): Promise<VerifyResult
     const key = `link:${id}`;
     const data = await kv.get<LinkRecord | null>(key);
     if (data == null) {
-      return failure("Chip not found.", "NOT_FOUND");
+      return failure("Ouvre not found.", "NOT_FOUND");
     }
     if (data.pin !== pin) {
       return failure("Invalid PIN.", "UNAUTHORIZED");
@@ -85,7 +85,7 @@ export async function updateSocialLinks(
   links: SocialLink[]
 ): Promise<UpdateLinksResult> {
   if (!VALID_ID_REGEX.test(id)) {
-    return failure("Invalid chip ID.", "INVALID_INPUT");
+    return failure("Invalid ouvre ID.", "INVALID_INPUT");
   }
   if (!PIN_REGEX.test(pin)) {
     return failure("PIN must be exactly 3 digits.", "INVALID_INPUT");
@@ -95,7 +95,7 @@ export async function updateSocialLinks(
     const key = `link:${id}`;
     const data = await kv.get<LinkRecord | null>(key);
     if (data == null) {
-      return failure("Chip not found.", "NOT_FOUND");
+      return failure("Ouvre not found.", "NOT_FOUND");
     }
     if (data.pin !== pin) {
       return failure("Invalid PIN.", "UNAUTHORIZED");
