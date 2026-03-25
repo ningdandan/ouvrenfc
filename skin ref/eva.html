@@ -1,0 +1,893 @@
+<html lang="ja" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">NERV Link Tree - Katakana Edition</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="6">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="7">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;display=swap" rel="stylesheet" vid="8">
+    <style vid="9">
+        :root {
+            --term-green: #39ff14;
+            --term-green-dim: #1d7a0a;
+            --term-red: #FF8600;
+            --term-orange: #FF8600;
+            --term-bg: #050a05;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', 'Hiragino Sans', 'Meiryo', monospace;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: var(--term-green);
+            overflow: hidden;
+        }
+
+        #device-container {
+            width: 375px;
+            height: 812px;
+            background-color: var(--term-bg);
+            position: relative;
+            overflow: hidden;
+            border-radius: 40px;
+            box-shadow: 0 0 50px rgba(57, 255, 20, 0.1);
+            border: 8px solid #1a1a1a;
+        }
+
+        .scanlines {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0),
+                rgba(255, 255, 255, 0) 50%,
+                rgba(0, 0, 0, 0.3) 50%,
+                rgba(0, 0, 0, 0.3)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .tv-static-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 60;
+            overflow: hidden;
+            /* Keep dark areas dark; noise reacts mostly on bright pixels */
+            mix-blend-mode: color-dodge;
+            opacity: 0.2;
+        }
+
+        .tv-static-burst {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 61;
+            overflow: hidden;
+            mix-blend-mode: difference;
+            background: #ffffff;
+            opacity: 0;
+            transform-origin: center;
+            animation: tv-psy-burst 3.8s steps(1, end) infinite;
+        }
+
+        .tv-static-burst::before {
+            content: '';
+            position: absolute;
+            inset: -10%;
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    rgba(255, 255, 255, 0) 0px,
+                    rgba(255, 255, 255, 0) 9px,
+                    rgba(255, 255, 255, 0.95) 9px,
+                    rgba(255, 255, 255, 0.95) 13px
+                ),
+                radial-gradient(rgba(255, 255, 255, 1) 0.75px, transparent 1px);
+            background-size: auto, 2px 2px;
+            animation: tv-psy-slice 3.8s steps(1, end) infinite;
+            opacity: 0;
+        }
+
+        .tv-static-overlay::before,
+        .tv-static-overlay::after {
+            content: '';
+            position: absolute;
+            inset: -40%;
+            pointer-events: none;
+        }
+
+        .tv-static-overlay::before {
+            background-image:
+                radial-gradient(rgba(255, 150, 150, 0.48) 0.7px, transparent 0.9px),
+                radial-gradient(rgba(255, 70, 70, 0.38) 0.8px, transparent 1px),
+                linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 140, 140, 0.1) 50%, rgba(255, 255, 255, 0) 100%);
+            background-size: 3px 3px, 4px 4px, 100% 6px;
+            background-position: 0 0, 1px 2px, 0 0;
+            animation:
+                tv-noise-shift 85ms steps(2, end) infinite,
+                tv-flicker 95ms steps(2, end) infinite;
+            opacity: 0.82;
+        }
+
+        .tv-static-overlay::after {
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.08) 0px,
+                rgba(255, 255, 255, 0.08) 1px,
+                rgba(0, 0, 0, 0) 1px,
+                rgba(0, 0, 0, 0) 3px
+            );
+            animation:
+                tv-glitch-jump 650ms steps(1, end) infinite,
+                tv-flicker 110ms steps(2, end) infinite reverse;
+            opacity: 0.42;
+        }
+
+        @keyframes tv-noise-shift {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-1.5%, 1%); }
+            40% { transform: translate(1.4%, -0.6%); }
+            60% { transform: translate(-0.8%, -1.2%); }
+            80% { transform: translate(1.7%, 0.8%); }
+            100% { transform: translate(0, 0); }
+        }
+
+        @keyframes tv-flicker {
+            0% { opacity: 0.08; }
+            10% { opacity: 0.24; }
+            19% { opacity: 0.1; }
+            27% { opacity: 0.28; }
+            36% { opacity: 0.09; }
+            49% { opacity: 0.22; }
+            62% { opacity: 0.1; }
+            78% { opacity: 0.3; }
+            100% { opacity: 0.09; }
+        }
+
+        @keyframes tv-glitch-jump {
+            0%, 88% { transform: translate(0, 0) skewX(0deg); }
+            89% { transform: translate(0.8%, -1.2%) skewX(1.2deg); }
+            91% { transform: translate(-1.4%, 0.8%) skewX(-1.8deg); }
+            93% { transform: translate(1.1%, -0.6%) skewX(0.9deg); }
+            95% { transform: translate(-0.6%, 0.9%) skewX(-1deg); }
+            100% { transform: translate(0, 0) skewX(0deg); }
+        }
+
+        @keyframes tv-psy-burst {
+            0%, 82%, 100% {
+                opacity: 0;
+                transform: translate3d(0, 0, 0) skewX(0deg);
+            }
+            83% {
+                opacity: 0.9;
+                transform: translate3d(-1px, 0, 0) skewX(-1.6deg);
+            }
+            84% {
+                opacity: 1;
+                transform: translate3d(2px, -1px, 0) skewX(2.3deg);
+            }
+            85% {
+                opacity: 0.82;
+                transform: translate3d(-2px, 1px, 0) skewX(-2.6deg);
+            }
+            86%, 91% {
+                opacity: 0;
+                transform: translate3d(0, 0, 0) skewX(0deg);
+            }
+            92% {
+                opacity: 0.72;
+                transform: translate3d(1px, -1px, 0) skewX(1.4deg);
+            }
+            93% {
+                opacity: 0;
+                transform: translate3d(0, 0, 0) skewX(0deg);
+            }
+        }
+
+        @keyframes tv-psy-slice {
+            0%, 82%, 100% {
+                opacity: 0;
+                transform: translateY(0);
+            }
+            83% {
+                opacity: 0.35;
+                transform: translateY(-2%);
+            }
+            84% {
+                opacity: 0.58;
+                transform: translateY(1.5%);
+            }
+            85% {
+                opacity: 0.28;
+                transform: translateY(-1%);
+            }
+            86%, 91% {
+                opacity: 0;
+                transform: translateY(0);
+            }
+            92% {
+                opacity: 0.4;
+                transform: translateY(1%);
+            }
+            93% {
+                opacity: 0;
+                transform: translateY(0);
+            }
+        }
+
+        .crt-glow {
+            text-shadow: 0 0 2px var(--term-green), 0 0 8px rgba(57, 255, 20, 0.4);
+        }
+
+        .crt-glow-red {
+            text-shadow: 0 0 2px var(--term-red), 0 0 8px rgba(255, 51, 51, 0.6);
+        }
+
+        .vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.8) 120%);
+            pointer-events: none;
+            z-index: 40;
+        }
+
+        .map-grid {
+            position: absolute;
+            inset: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(to right, rgba(0, 236, 159, 0.24) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 236, 159, 0.24) 1px, transparent 1px);
+            background-size: 30px 30px;
+            transform: perspective(500px) rotateX(20deg) scale(1.1) translateY(-10%);
+            transform-origin: top center;
+            z-index: 1;
+            filter: drop-shadow(0 0 5px rgba(0, 236, 159, 0.7));
+        }
+
+        .map-contour {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            opacity: 0.55;
+            pointer-events: none;
+            filter: drop-shadow(0 0 4px rgba(255, 102, 0, 0.35));
+        }
+
+        .map-contour path {
+            fill: none;
+            stroke: #ff8600;
+            stroke-linecap: round;
+        }
+
+        .map-contour .contour-main {
+            stroke-width: 1.6;
+            stroke-opacity: 0.55;
+        }
+
+        .map-contour .contour-sub {
+            stroke-width: 1;
+            stroke-opacity: 0.34;
+            stroke-dasharray: 5 7;
+        }
+
+        .map-contour .coord-mark {
+            stroke: #ff9a3d;
+            stroke-width: 1.2;
+            stroke-opacity: 0.75;
+            fill: none;
+        }
+
+        .map-contour .coord-dot {
+            fill: #ff8600;
+            fill-opacity: 0.7;
+            animation: coord-blink 1.6s steps(2, end) infinite;
+        }
+
+        .map-contour .coord-label {
+            fill: #ffad66;
+            fill-opacity: 0.76;
+            font-size: 7px;
+            letter-spacing: 0.08em;
+        }
+
+        .map-contour .shockwave {
+            stroke: #ff8600;
+            stroke-width: 1.4;
+            stroke-opacity: 0.58;
+            fill: none;
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: wave-pulse 2.8s ease-out infinite;
+        }
+
+        .map-contour .shockwave-delayed {
+            animation-delay: 1.2s;
+        }
+
+        .map-contour .shockwave-fast {
+            animation-duration: 1.9s;
+        }
+
+        .map-contour .shockwave-slow {
+            animation-duration: 3.6s;
+        }
+
+        .map-contour .shockwave-late {
+            animation-delay: 0.7s;
+        }
+
+        .map-contour .blast-ring-static {
+            stroke: #ffb06a;
+            stroke-width: 1.1;
+            stroke-opacity: 0.5;
+            fill: none;
+            stroke-dasharray: 3 6;
+        }
+
+        .map-contour .impact-spoke {
+            stroke: #ff9a3d;
+            stroke-width: 1.2;
+            stroke-opacity: 0.6;
+            fill: none;
+        }
+
+        @keyframes wave-pulse {
+            0% {
+                transform: scale(0.2);
+                opacity: 0.75;
+            }
+            72% {
+                opacity: 0.35;
+            }
+            100% {
+                transform: scale(2.05);
+                opacity: 0;
+            }
+        }
+
+        @keyframes coord-blink {
+            0%, 100% { opacity: 0.28; }
+            50% { opacity: 1; }
+        }
+
+        .title-logo-wrap {
+            position: absolute;
+            top: -90px;
+            left: 50%;
+            width: 160px;
+            height: 90px;
+            transform: translateX(-50%);
+            /* transform: translateY(-30%); */
+            display: flex;
+            /* align-items: center; */
+            justify-content: center;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.92;
+        }
+
+        .title-logo-svg {
+            width: 76%;
+            height: 76%;
+            overflow: visible;
+            filter:
+                drop-shadow(0 0 8px rgba(255, 134, 0, 0.95))
+                drop-shadow(0 0 20px rgba(255, 80, 0, 0.6));
+            transform-origin: center;
+            animation:
+                logo-spin 8s linear infinite,
+                logo-core-pulse 1.2s ease-in-out infinite;
+        }
+
+        .map-logo-path {
+            fill: none;
+            stroke: #ff8600;
+            stroke-width: 3.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @keyframes logo-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes logo-core-pulse {
+            0%, 100% {
+                filter:
+                    drop-shadow(0 0 8px rgba(255, 134, 0, 0.8))
+                    drop-shadow(0 0 20px rgba(255, 80, 0, 0.5));
+            }
+            50% {
+                filter:
+                    drop-shadow(0 0 12px rgba(255, 134, 0, 0.95))
+                    drop-shadow(0 0 28px rgba(255, 80, 0, 0.65));
+            }
+        }
+
+        @keyframes pulse-fast {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse-fast {
+            animation: pulse-fast 0.2s infinite;
+        }
+
+        .tactical-box {
+            border: 1.5px solid var(--term-red);
+            background-color: rgba(20, 0, 0, 0.8);
+            position: relative;
+        }
+        .tactical-box::before {
+            content: '';
+            position: absolute;
+            top: -1.5px; left: -1.5px;
+            width: 6px; height: 6px;
+            border-top: 1.5px solid white; border-left: 1.5px solid white;
+        }
+        .tactical-box::after {
+            content: '';
+            position: absolute;
+            bottom: -1.5px; right: -1.5px;
+            width: 6px; height: 6px;
+            border-bottom: 1.5px solid white; border-right: 1.5px solid white;
+        }
+
+        .center-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--term-orange), transparent);
+            transform: translateX(-50%);
+            z-index: 3;
+            box-shadow: 0 0 8px var(--term-orange);
+            opacity: 0.8;
+        }
+
+        .map-text {
+            position: absolute;
+            font-size: 8px;
+            color: var(--term-orange);
+            opacity: 0.7;
+            letter-spacing: 0.05em;
+            pointer-events: none;
+            z-index: 2;
+            text-shadow: 0 0 8px rgba(195, 21, 0, 0.55);
+        }
+
+        .map-text-social {
+            top: 130px;
+            left: 60px;
+        }
+
+        .map-text-yokohama {
+            top: 230px;
+            left: 220px;
+        }
+
+        .hex-shape {
+            --hex-clip: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+        }
+
+        .ops-title {
+            font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'MS Mincho', serif;
+        }
+
+        .ops-main-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.08em;
+            line-height: 1;
+            text-shadow: 0 0 10px #ffffff;
+        }
+
+        .ops-subtitle {
+            font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'MS Mincho', serif;
+            font-size: 7px;
+            color: #ffffff;
+            letter-spacing: 0.25em;
+            opacity: 0.8;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .hex-link {
+            position: relative;
+            z-index: 12;
+            overflow: visible;
+            background-color: transparent;
+            box-shadow: none;
+            filter: none;
+            isolation: isolate;
+        }
+
+        .hex-link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            clip-path: var(--hex-clip);
+            background-color: #ff8600;
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.35);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hex-link::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            clip-path: var(--hex-clip);
+            background: rgba(195, 21, 0, 0.85);
+            filter: blur(14px);
+            opacity: 1;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hex-link:hover {
+            box-shadow: none;
+            filter: none;
+        }
+
+        .hex-link:hover::before {
+            background-color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 0, 0, 0.45), 0 0 22px rgba(195, 21, 0, 0.35);
+        }
+
+        .hex-link:hover::after {
+            inset: -16px;
+            background: rgba(195, 21, 0, 0.95);
+            filter: blur(16px);
+            opacity: 1;
+        }
+
+        .hex-label {
+            color: #000000;
+        }
+
+        .hex-arrow-top {
+            width: 0;
+            height: 0;
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-bottom: 12px solid #000000;
+            margin-bottom: 6px;
+            border-bottom-color: #000000;
+        }
+
+        .hex-arrow-bottom {
+            width: 0;
+            height: 0;
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-top: 12px solid #000000;
+            margin-top: 6px;
+            border-top-color: #000000;
+        }
+
+        .hex-link:hover .hex-label {
+            color: #ff8600;
+        }
+
+        .hex-link:hover .hex-arrow-top {
+            border-bottom-color: #ff8600;
+        }
+
+        .hex-link:hover .hex-arrow-bottom {
+            border-top-color: #ff8600;
+        }
+
+        .hex-nav-link {
+            position: absolute;
+            width: 110px;
+            height: 96px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            animation: hex-spasm 3.1s steps(1, end) infinite;
+            transform-origin: center;
+            will-change: transform, filter;
+        }
+
+        .hex-nav-link > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hex-link-label {
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.08em;
+        }
+
+        .hex-pos-1 {
+            top: 2%;
+            left: 2%;
+            animation-duration: 2.65s;
+            animation-delay: -1.2s;
+        }
+        .hex-pos-2 {
+            top: 30%;
+            left: 20%;
+            z-index: 10;
+            animation-duration: 3.4s;
+            animation-delay: -0.55s;
+        }
+        .hex-pos-3 {
+            top: 58%;
+            left: 2%;
+            animation-duration: 2.95s;
+            animation-delay: -2.1s;
+        }
+        .hex-pos-4 {
+            top: 10%;
+            right: 2%;
+            animation-duration: 3.75s;
+            animation-delay: -1.85s;
+        }
+        .hex-pos-5 {
+            top: 40%;
+            right: 16%;
+            animation-duration: 2.5s;
+            animation-delay: -0.9s;
+        }
+        .hex-pos-6 {
+            top: 70%;
+            right: 2%;
+            animation-duration: 3.2s;
+            animation-delay: -2.45s;
+        }
+
+        @keyframes hex-spasm {
+            0%, 78%, 100% {
+                transform: translate3d(0, 0, 0) rotate(0deg);
+                filter: none;
+            }
+            79% {
+                transform: translate3d(-1px, 1px, 0) rotate(-0.9deg);
+                filter: invert(1) contrast(1.3) saturate(1.5);
+            }
+            80% {
+                transform: translate3d(2px, -1px, 0) rotate(0.8deg);
+                filter: invert(1) contrast(1.4) saturate(1.6);
+            }
+            81% {
+                transform: translate3d(-2px, 1px, 0) rotate(-0.6deg);
+                filter: invert(1) contrast(1.25) saturate(1.35);
+            }
+            82% {
+                transform: translate3d(0, 0, 0) rotate(0deg);
+                filter: none;
+            }
+            94% {
+                transform: translate3d(1px, -1px, 0) rotate(0.5deg);
+                filter: invert(1) contrast(1.2) saturate(1.25);
+            }
+            95% {
+                transform: translate3d(0, 0, 0) rotate(0deg);
+                filter: none;
+            }
+        }
+
+        .hazard-stripe {
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, #000, #000 10px, #ff6600 10px, #ff6600 20px);
+        }
+
+        .main-content {
+            transform: translateY(10%);
+        }
+    </style>
+</head>
+<body vid="10">
+
+    <div id="device-container" vid="11">
+        <div class="tv-static-overlay" vid="107"></div>
+        <div class="tv-static-burst" vid="108"></div>
+        <div class="scanlines" vid="12"></div>
+        <div class="vignette" vid="13"></div>
+        <div class="map-grid" vid="14"></div>
+        <svg class="map-contour" viewBox="0 0 375 812" xmlns="http://www.w3.org/2000/svg" vid="109">
+            <path class="contour-main" d="M-20 120 C50 95, 120 140, 182 118 C240 98, 305 105, 396 142" vid="110"></path>
+            <path class="contour-sub" d="M-30 156 C36 130, 122 176, 188 158 C248 142, 314 144, 404 176" vid="111"></path>
+            <path class="contour-main" d="M-25 240 C52 212, 132 258, 202 236 C276 212, 332 220, 402 250" vid="112"></path>
+            <path class="contour-sub" d="M-20 274 C58 244, 145 291, 218 268 C286 245, 338 255, 398 286" vid="113"></path>
+            <path class="contour-main" d="M-35 360 C40 332, 118 382, 182 360 C246 338, 304 348, 396 382" vid="114"></path>
+            <path class="contour-sub" d="M-22 404 C54 372, 136 426, 208 402 C274 380, 334 389, 404 418" vid="115"></path>
+            <path class="contour-main" d="M-28 520 C44 488, 120 546, 190 520 C258 495, 320 500, 404 544" vid="116"></path>
+            <path class="contour-sub" d="M-20 558 C60 524, 148 582, 224 554 C290 530, 344 536, 406 570" vid="117"></path>
+            <path class="contour-main" d="M-40 672 C35 642, 114 700, 184 674 C252 648, 314 656, 402 694" vid="118"></path>
+            <path class="contour-sub" d="M-30 712 C48 678, 134 740, 210 712 C282 686, 338 694, 408 730" vid="119"></path>
+            <path class="contour-sub" d="M24 40 L86 96 L148 84 L210 138 L272 120 L348 170" vid="120"></path>
+            <path class="contour-sub" d="M40 304 L96 336 L142 326 L192 354 L254 338 L320 372" vid="121"></path>
+            <path class="contour-sub" d="M66 606 L120 630 L176 622 L228 650 L290 638 L342 668" vid="122"></path>
+            <g vid="123">
+                <circle class="shockwave" cx="286" cy="292" r="10"></circle>
+                <circle class="shockwave shockwave-delayed" cx="286" cy="292" r="10"></circle>
+                <circle class="coord-dot" cx="286" cy="292" r="2.2"></circle>
+                <line class="coord-mark" x1="270" y1="292" x2="278" y2="292"></line>
+                <line class="coord-mark" x1="294" y1="292" x2="302" y2="292"></line>
+                <line class="coord-mark" x1="286" y1="276" x2="286" y2="284"></line>
+                <line class="coord-mark" x1="286" y1="300" x2="286" y2="308"></line>
+                <text class="coord-label" x="306" y="287">B-12</text>
+            </g>
+            <g vid="124">
+                <circle class="coord-dot" cx="112" cy="226" r="1.8"></circle>
+                <path class="coord-mark" d="M92 226 L104 226 M120 226 L132 226 M112 206 L112 218 M112 234 L112 246"></path>
+                <text class="coord-label" x="136" y="223">QX-77</text>
+            </g>
+            <g vid="125">
+                <circle class="coord-dot" cx="236" cy="468" r="1.9"></circle>
+                <path class="coord-mark" d="M220 458 L232 466 L240 452 M240 484 L250 490 L258 478"></path>
+                <text class="coord-label" x="261" y="474">SE-04</text>
+            </g>
+            <g vid="126">
+                <circle class="coord-dot" cx="72" cy="566" r="1.9"></circle>
+                <path class="coord-mark" d="M54 558 L66 566 L74 552 M74 580 L86 588 L95 574"></path>
+                <text class="coord-label" x="98" y="573">RK-19</text>
+            </g>
+            <g vid="127">
+                <circle class="coord-dot" cx="308" cy="640" r="1.9"></circle>
+                <path class="coord-mark" d="M292 640 L302 640 M314 640 L324 640 M308 624 L308 634 M308 646 L308 656"></path>
+                <text class="coord-label" x="328" y="637">N2</text>
+            </g>
+            <g vid="128">
+                <circle class="shockwave shockwave-fast" cx="134" cy="352" r="8"></circle>
+                <circle class="shockwave shockwave-fast shockwave-late" cx="134" cy="352" r="8"></circle>
+                <circle class="blast-ring-static" cx="134" cy="352" r="23"></circle>
+                <path class="impact-spoke" d="M110 352 L121 352 M147 352 L158 352 M134 328 L134 339 M134 365 L134 376"></path>
+                <path class="impact-spoke" d="M118 336 L126 344 M142 360 L150 368 M118 368 L126 360 M142 344 L150 336"></path>
+                <circle class="coord-dot" cx="134" cy="352" r="1.9"></circle>
+                <text class="coord-label" x="162" y="347">IMP-31</text>
+            </g>
+            <g vid="129">
+                <circle class="shockwave shockwave-slow" cx="248" cy="196" r="9"></circle>
+                <circle class="shockwave shockwave-delayed shockwave-slow" cx="248" cy="196" r="9"></circle>
+                <circle class="blast-ring-static" cx="248" cy="196" r="20"></circle>
+                <path class="impact-spoke" d="M228 186 L239 192 L246 180 M268 206 L258 201 L252 212"></path>
+                <path class="impact-spoke" d="M232 210 L242 204 L250 216 M262 176 L254 183 L268 184"></path>
+                <circle class="coord-dot" cx="248" cy="196" r="2"></circle>
+                <text class="coord-label" x="272" y="190">CR-08</text>
+            </g>
+            <g vid="130">
+                <circle class="shockwave" cx="322" cy="470" r="7"></circle>
+                <circle class="shockwave shockwave-delayed" cx="322" cy="470" r="7"></circle>
+                <circle class="blast-ring-static" cx="322" cy="470" r="17"></circle>
+                <path class="impact-spoke" d="M304 470 L314 470 M330 470 L340 470 M322 452 L322 462 M322 478 L322 488"></path>
+                <circle class="coord-dot" cx="322" cy="470" r="1.7"></circle>
+                <text class="coord-label" x="344" y="466">VX-2</text>
+            </g>
+            <g vid="131">
+                <circle class="blast-ring-static" cx="74" cy="462" r="15"></circle>
+                <circle class="blast-ring-static" cx="74" cy="462" r="25"></circle>
+                <path class="impact-spoke" d="M52 450 L62 456 L70 446 M92 474 L82 468 L78 478 M52 474 L62 468 L68 478 M88 448 L80 454 L92 456"></path>
+                <circle class="coord-dot" cx="74" cy="462" r="1.6"></circle>
+                <text class="coord-label" x="96" y="458">BL-4</text>
+            </g>
+            <g vid="132">
+                <circle class="shockwave shockwave-fast" cx="190" cy="620" r="8"></circle>
+                <circle class="shockwave shockwave-fast shockwave-delayed" cx="190" cy="620" r="8"></circle>
+                <circle class="blast-ring-static" cx="190" cy="620" r="19"></circle>
+                <path class="impact-spoke" d="M170 620 L180 620 M198 620 L208 620 M190 600 L190 610 M190 628 L190 638"></path>
+                <path class="impact-spoke" d="M176 606 L182 612 M198 628 L204 634 M176 634 L182 628 M198 612 L204 606"></path>
+                <circle class="coord-dot" cx="190" cy="620" r="1.9"></circle>
+                <text class="coord-label" x="212" y="616">NERV-Δ</text>
+            </g>
+        </svg>
+        <div class="center-line" vid="15"></div>
+        
+        <div class="map-text map-text-social" vid="24">ソシアル・ウェルフェア・ホール<br vid="25">X : 459.22</div>
+        <div class="map-text map-text-yokohama" vid="26">ヨコハマ・リージョン<br vid="27">アドミニストレーション・コーナー</div>
+
+        <div class="absolute top-8 left-4 right-4 z-20 flex justify-between items-start text-[10px] tracking-wider pointer-events-none" vid="29">
+            <div class="flex flex-col gap-1" vid="30">
+                <div class="flex items-center gap-2" vid="31">
+                    <span class="w-2 h-2 bg-[#39ff14] block animate-pulse-fast" vid="32"></span>
+                    <span class="crt-glow" vid="33">システム・オン</span>
+                </div>
+                <span class="text-[#1d7a0a]" vid="34">エル・シー・エル: ノミナル</span>
+                <span class="text-[#1d7a0a]" vid="35">エイ・ティー・フィールド: ステイブル</span>
+            </div>
+            <div class="flex flex-col gap-1 text-right" vid="36">
+                <span class="text-[#ff3333] crt-glow-red" vid="37">パワー: インターナル</span>
+                <span class="text-[#ff6600]" vid="38">タイム・リメイニング: 04:59</span>
+                <span class="text-[#1d7a0a] border border-[#1d7a0a] px-1 mt-1 inline-block w-max ml-auto text-[8px]" vid="39">トップ・シークレット</span>
+            </div>
+        </div>
+
+        <div class="absolute bottom-6 right-4 z-20 pointer-events-none" vid="99">
+            <div class="border border-white px-2 py-2 relative bg-transparent w-max" vid="100">
+                <div class="text-right" vid="101">
+                    <div class="ops-title ops-main-title" vid="102">作戦行動<br vid="103">予定図</div>
+                </div>
+            </div>
+            <div class="ops-subtitle" vid="104">オペレーティング・スケマティック</div>
+            
+        </div>
+
+        <div class="main-content relative z-10 w-full h-full p-4 flex flex-col pt-24 pb-28 overflow-hidden" vid="28">
+
+            <div class="flex flex-col items-center mb-8 relative" vid="40">
+                <div class="title-logo-wrap" vid="41">
+                    <svg class="title-logo-svg" viewBox="0 0 389 229" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Custom Logo" vid="42">
+                        <path class="map-logo-path" d="M206.863 1.70117C215.029 19.6161 225.034 32.9693 238.691 43.0605C252.343 53.1475 269.61 59.9507 292.259 64.8223H292.26C293.825 65.1587 295.273 65.4773 296.406 65.7324C295.962 65.7924 295.476 65.8567 294.965 65.9199C265.207 69.6043 235.913 82.7876 216.823 97.8057C207.283 105.311 200.249 113.308 197.004 120.85C195.379 124.625 194.696 128.308 195.146 131.764C195.596 135.227 197.181 138.427 200.028 141.234C203.06 144.223 207.505 146.461 213.052 147.974C218.602 149.488 225.288 150.285 232.834 150.371C247.927 150.543 266.517 147.871 286.479 142.341C323.818 131.996 355.394 114.281 384.125 87.5586V87.5576L385.912 85.8945L384.349 88.4961C358.656 131.242 315.52 162.856 262.572 177.778L260.044 178.477C238.035 184.424 232.431 186.272 224.338 190.281C209.621 197.571 199.207 209.193 193.561 224.624L193.295 225.361L192.584 227.37L190.696 224.226C174.517 197.286 148.352 180.952 107.871 172.396C104.247 171.631 99.1208 170.707 94.6357 169.976C92.3929 169.61 90.3068 169.292 88.6465 169.064C87.6416 168.927 86.7777 168.823 86.127 168.762C86.185 168.755 86.2444 168.747 86.3047 168.74C116.31 165.353 147.033 151.685 167.482 136.115C177.703 128.334 185.401 120.045 189.141 112.284C191.013 108.4 191.904 104.622 191.6 101.096C191.294 97.559 189.787 94.3118 186.929 91.499C182.801 87.438 176.166 84.7341 167.842 83.2676C159.506 81.799 149.416 81.5605 138.314 82.4814C116.111 84.3234 89.7988 90.8081 65.249 101.445C42.7591 111.19 22.1384 124.755 2.5918 142.658C2.14047 143.071 1.74115 143.433 1.39648 143.742C1.48127 143.605 1.5711 143.459 1.66797 143.305C2.39033 142.155 3.43812 140.551 4.83594 138.418C24.6515 108.181 57.1454 81.6438 92.9863 66.4424C94.8129 65.6672 97.7167 64.4269 99.4385 63.6865C106.25 60.7575 119.364 56.4684 136.278 51.6445C159.943 44.8958 166.542 42.4174 176.641 36.4336C190.232 28.3813 201.72 15.1532 206.411 2.10938L206.692 1.3252L206.863 1.70117Z" vid="43"></path>
+                    </svg>
+                </div>
+                
+                <div class="tactical-box px-6 py-2 mb-2" vid="46">
+                    <div class="text-[9px] text-[#ff6600] mb-1" vid="47">ウーヴル_00001 // OUVRE_00001</div>
+                    <h1 class="text-2xl font-bold text-[#ff3333] tracking-widest crt-glow-red m-0" vid="48">USER.NAME</h1>
+                </div>
+
+            </div>
+
+            <div class="flex-1 w-full pl-2 pr-8 mt-2" vid="52">
+                <!-- <div class="flex items-center gap-2 mb-4" vid="53">
+                    <div class="h-[1px] bg-[#39ff14] flex-1 opacity-50" vid="54"></div>
+                    <span class="text-[10px] text-[#39ff14] crt-glow" vid="55">セレクト・デプロイメント・ターゲット [展開目標選択]</span>
+                    
+                    <div class="w-4 h-4 border border-[#39ff14] flex items-center justify-center text-[8px] opacity-80" vid="56">+</div>
+                </div> -->
+
+                <nav class="relative w-full h-[420px] mt-2" vid="57">
+                    <a href="#" class="hex-shape hex-link hex-nav-link hex-pos-1" vid="58">
+                        <div class="hex-arrow-top" vid="59"></div>
+                        <span class="hex-label hex-link-label">PORTFOLIO</span>
+                        <div class="hex-arrow-bottom" vid="60"></div>
+                    </a>
+
+                    <a href="#" class="hex-shape hex-link hex-nav-link hex-pos-2" vid="61">
+                        <div class="hex-arrow-top" vid="62"></div>
+                        <span class="hex-label hex-link-label">GITHUB</span>
+                        <div class="hex-arrow-bottom" vid="63"></div>
+                    </a>
+
+                    <a href="#" class="hex-shape hex-link hex-nav-link hex-pos-3" vid="64">
+                        <div class="hex-arrow-top" vid="65"></div>
+                        <span class="hex-label hex-link-label">DRIBBBLE</span>
+                        <div class="hex-arrow-bottom" vid="66"></div>
+                    </a>
+
+                    <a href="#" class="hex-shape hex-link hex-nav-link hex-pos-4" vid="67">
+                        <div class="hex-arrow-top" vid="68"></div>
+                        <span class="hex-label hex-link-label">TWITTER</span>
+                        <div class="hex-arrow-bottom" vid="69"></div>
+                    </a>
+
+                    <a href="#" class="hex-shape hex-link hex-nav-link hex-pos-5" vid="70">
+                        <div class="hex-arrow-top" vid="71"></div>
+                        <span class="hex-label hex-link-label">LINKEDIN</span>
+                        <div class="hex-arrow-bottom" vid="72"></div>
+                    </a>
+
+                    <a href="#" class="hex-shape hex-link hex-nav-link hex-pos-6" vid="73">
+                        <div class="hex-arrow-top" vid="74"></div>
+                        <span class="hex-label hex-link-label">CONTACT</span>
+                        <div class="hex-arrow-bottom" vid="75"></div>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="w-full h-1 bg-[#ff6600] mt-4 opacity-50" vid="105">
+                 <div class="hazard-stripe" vid="106"></div>
+            </div>
+        </div>
+    </div>
+</body></html>

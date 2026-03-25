@@ -17,15 +17,11 @@ export function OuvreBackroomBackground() {
         className="w-full h-full object-cover object-center select-none pointer-events-none"
       />
 
-      {/* Small center video */}
+      {/* Small center gif */}
       <div className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 w-[100px] h-[70px] video-feather">
-        <video
-          src="/video3.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
+        <img
+          src="/video3.gif"
+          alt=""
           className="w-full h-full object-cover object-center pointer-events-none"
         />
       </div>

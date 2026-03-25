@@ -4,6 +4,7 @@ import type { ComponentType } from "react";
 import type { SkinId, SkinProps } from "@/app/link/types";
 import { BWSkin } from "./BWSkin";
 import { BratSkin } from "./brat";
+import { EvaSkin } from "./eva";
 import { WindowsXPSkin } from "./windowsxp";
 
 function WindowsXPSkinAdapter(props: SkinProps) {
@@ -14,6 +15,7 @@ export const SKINS: Record<SkinId, ComponentType<SkinProps>> = {
   windowsxp: WindowsXPSkinAdapter,
   "bw-test": BWSkin,
   brat: BratSkin,
+  eva: EvaSkin,
 };
 
 export type SkinRendererProps = SkinProps & { skinId: SkinId };

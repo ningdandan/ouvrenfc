@@ -17,7 +17,7 @@ export type SocialLink = {
   value: string;
 };
 
-export type SkinId = "windowsxp" | "bw-test" | "brat";
+export type SkinId = "windowsxp" | "bw-test" | "brat" | "eva";
 
 export type SkinProps = {
   links: SocialLink[];

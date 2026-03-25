@@ -1,6 +1,7 @@
 "use client";
 
 export { BWSkin } from "./BWSkin";
+export { EvaSkin } from "./eva";
 export { BratSkin } from "./brat";
 export { BackroomShell } from "./backroom";
 export { WindowsXPSkin } from "./windowsxp";
