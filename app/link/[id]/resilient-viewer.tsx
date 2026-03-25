@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { InitializeChip } from "./initialize-chip";
+import { InitializeOuvre } from "./initialize-ouvre";
 import { LinkView } from "./link-view";
 import type { SocialLink } from "../types";
 
@@ -92,7 +92,7 @@ export function ResilientViewer({
   }
 
   if (!hasData) {
-    return <InitializeChip id={id} />;
+    return <InitializeOuvre id={id} />;
   }
 
   return <LinkView id={id} links={links} firstInit={firstInit} />;

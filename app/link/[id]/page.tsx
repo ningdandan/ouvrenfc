@@ -41,16 +41,14 @@ export default async function LinkPage({
     !kvError && raw != null && (raw.pin != null || (raw.links?.length ?? 0) > 0);
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-[420px] mx-auto flex flex-col min-h-[540px]">
-        <ResilientViewer
-          id={id}
-          links={raw?.links ?? []}
-          hasData={hasData}
-          loadError={kvError}
-          firstInit={firstInit}
-        />
-      </div>
+    <main className="min-h-[100svh] min-h-dvh flex flex-col">
+      <ResilientViewer
+        id={id}
+        links={raw?.links ?? []}
+        hasData={hasData}
+        loadError={kvError}
+        firstInit={firstInit}
+      />
     </main>
   );
 }

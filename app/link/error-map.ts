@@ -13,9 +13,9 @@ export function getErrorMessage(code: ActionErrorCode, fallback?: string): strin
     case "UNAUTHORIZED":
       return "Authentication failed. Please verify the PIN.";
     case "NOT_FOUND":
-      return "Chip data not found.";
+      return "Ouvre data not found.";
     case "ALREADY_EXISTS":
-      return "This chip is already activated.";
+      return "This ouvre is already activated.";
     case "KV_TIMEOUT":
       return "Network is slow. Request timed out.";
     case "KV_RATE_LIMIT":

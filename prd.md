@@ -1,6 +1,6 @@
 PRD: Industrial Dynamic NFC Link System
 1. Project Overview
-A high-frequency, dynamic landing page system for 100 physical NFC chips. Each chip maps to a unique URL path (/link/00001 to /link/00100). The system allows for "Physical-to-Digital" ownership activation via a 3-digit PIN and dynamic social link management.
+A high-frequency, dynamic landing page system for 100 physical Ouvre NFC tags. Each ouvre maps to a unique URL path (/link/00001 to /link/00100). The system allows for "Physical-to-Digital" ownership activation via a 3-digit PIN and dynamic social link management.
 
 2. Tech Stack
 Framework: Next.js 15 (App Router)
