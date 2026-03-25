@@ -64,7 +64,7 @@ export function InitializeOuvre({ id }: Props) {
               onClick={() => setStep("pin")}
               className="text-2xl tracking-[0.2em] text-black active:scale-95 transition-transform"
             >
-              start ouvre
+              unlock ouvre
             </button>
           </div>
         </section>

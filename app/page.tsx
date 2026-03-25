@@ -14,7 +14,7 @@ export default function HomePage() {
             href="https://www.ouvre.nyc"
             className="text-2xl tracking-[0.2em] text-black active:scale-95 transition-transform"
           >
-            start ouvre
+            unlock ouvre
           </a>
         </div>
       </section>
