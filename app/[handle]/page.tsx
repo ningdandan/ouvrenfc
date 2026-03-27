@@ -23,7 +23,7 @@ export default async function HandlePage({
   searchParams,
 }: {
   params: Promise<{ handle: string }>;
-  searchParams?: Promise<{ edit?: string }>;
+  searchParams?: Promise<{ edit?: string; from?: string }>;
 }) {
   const { handle } = await params;
   const resolvedSearch = searchParams ? await searchParams : undefined;
