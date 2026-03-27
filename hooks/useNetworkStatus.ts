@@ -6,6 +6,8 @@ type EffectiveNetworkType = "slow-2g" | "2g" | "3g" | "4g";
 
 type NavigatorConnection = {
   effectiveType?: EffectiveNetworkType;
+  addEventListener: (type: string, listener: EventListener) => void;
+  removeEventListener: (type: string, listener: EventListener) => void;
 };
 
 function readConnection() {
