@@ -15,6 +15,8 @@ function skinFromSearchParam(raw: string | null): SkinId {
       return "brat";
     case "eva":
       return "eva";
+    case "duck":
+      return "duck";
     default:
       return "windowsxp";
   }
