@@ -22,11 +22,22 @@ export type SkinId = "windowsxp" | "bw-test" | "brat" | "eva" | "duck";
 export type SkinProps = {
   links: SocialLink[];
   id: string;
-  /**
-   * When provided, the skin should show an "edit" affordance (used in public view).
-   * Only wired by `SkinRenderer`.
-   */
   onRequestEdit?: () => void;
+};
+
+/** KV record stored at card:<id> */
+export type CardRecord = {
+  status: "inactive" | "active";
+  key: string;
+  handle?: string;
+};
+
+/** KV record stored at user:<handle> */
+export type UserRecord = {
+  id: string;
+  spaceName: string;
+  socialLinks: SocialLink[];
+  theme: SkinId;
 };
 
 export const ACTION_ERROR_CODES = [

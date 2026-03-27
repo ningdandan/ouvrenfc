@@ -1,0 +1,104 @@
+.boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: boot-overlay-fade 0.35s ease-out both;
+  overflow: hidden;
+}
+
+/* Semi-transparent black dim layer sitting on top of the background */
+.boot-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+@keyframes boot-overlay-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.boot-text-wrap {
+  position: relative;
+  z-index: 2;
+  animation: boot-text-appear 0.6s ease-out 0.3s both;
+  text-align: center;
+  padding: 0 2rem;
+  line-height: 2.2;
+}
+
+@keyframes boot-text-appear {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Override techno-tremor's fixed sizing when used inside boot screen */
+.boot-text-wrap .techno-tremor {
+  font-size: 12px;
+  width: auto;
+}
+
+/* Glitch line that sweeps across the text */
+.boot-text-glitch {
+  position: relative;
+  display: inline-block;
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  line-height: 1.6;
+  font-family: inherit;
+}
+
+.boot-text-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: #fff;
+  clip-path: inset(0 0 0 0);
+  animation: boot-glitch-clip 0.12s steps(1) infinite;
+  opacity: 0.08;
+}
+
+@keyframes boot-glitch-clip {
+  0%   { clip-path: inset(20% 0 70% 0); transform: translate(-2px, 0); }
+  25%  { clip-path: inset(60% 0 15% 0); transform: translate(1px,  0); }
+  50%  { clip-path: inset(40% 0 45% 0); transform: translate(-1px, 0); }
+  75%  { clip-path: inset(80% 0  5% 0); transform: translate(2px,  0); }
+  100% { clip-path: inset(10% 0 75% 0); transform: translate(-2px, 0); }
+}
+
+/* Cursor blink at the end */
+.boot-cursor {
+  display: inline-block;
+  width: 5px;
+  height: 9px;
+  background: #fff;
+  vertical-align: middle;
+  margin-left: 3px;
+  animation: boot-cursor-blink 0.6s step-end infinite;
+  border-radius: 1px;
+}
+
+@keyframes boot-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Scanline overlay for CRT feel */
+.boot-scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(255, 255, 255, 0.015) 3px,
+    rgba(255, 255, 255, 0.015) 4px
+  );
+}

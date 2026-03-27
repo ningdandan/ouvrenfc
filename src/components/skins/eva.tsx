@@ -185,7 +185,7 @@ export function EvaSkin({ id, links, onRequestEdit }: SkinProps) {
           </div>
 
           {/* Bottom-right tactical text */}
-          <div className="absolute bottom-6 right-4 z-20 pointer-events-none">
+          <div className="absolute bottom-24 right-4 z-20 pointer-events-none">
             <div className="border border-white px-2 py-2 relative bg-transparent w-max">
               <div className="text-right">
                 <div className="eva-ops-title eva-ops-main-title">
@@ -213,7 +213,7 @@ export function EvaSkin({ id, links, onRequestEdit }: SkinProps) {
               </svg>
             </div>
 
-            <div className="eva-tactical-box px-6 py-2 mb-2">
+            <div className="eva-tactical-box px-6 py-2 mb-2 text-center">
               <div className="text-[9px] text-[#ff6600] mb-1">
                 ウーヴル_{id.padStart(5, "0")} // OUVRE_{id.padStart(5, "0")}
               </div>

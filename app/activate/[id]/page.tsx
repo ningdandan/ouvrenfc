@@ -1,12 +1,13 @@
 import { notFound, redirect } from "next/navigation";
 import { kv } from "@vercel/kv";
-import type { CardRecord } from "../types";
+import type { CardRecord } from "../../link/types";
+import { ActivateForm } from "./activate-form";
 
 const VALID_ID_REGEX = /^00(0(0[1-9]|[1-9][0-9])|100)$/;
 
 export const revalidate = 0;
 
-export default async function LinkPage({
+export default async function ActivatePage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -21,16 +22,12 @@ export default async function LinkPage({
   try {
     card = await kv.get<CardRecord>(`card:${id}`);
   } catch {
-    // KV unreachable — fall through to notFound
+    // KV issue — still render the form, action will surface the error
   }
 
-  if (!card) {
-    notFound();
+  if (card?.status === "active" && card.handle) {
+    redirect(`/${card.handle}`);
   }
 
-  if (card.status === "inactive" || !card.handle) {
-    redirect(`/activate/${id}`);
-  }
-
-  redirect(`/${card.handle}`);
+  return <ActivateForm id={id} />;
 }

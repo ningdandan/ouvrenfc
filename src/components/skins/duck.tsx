@@ -34,12 +34,11 @@ export function DuckSkin({ id, links, onRequestEdit }: SkinProps) {
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* single wrapper — OUVRE at top, links below, whole block shifted down together */}
+        {/* header pinned near top */}
         <div
           style={{
             position: "absolute",
             top: "12%",
-            bottom: "4%",
             left: 0,
             right: 0,
             display: "flex",
@@ -63,9 +62,20 @@ export function DuckSkin({ id, links, onRequestEdit }: SkinProps) {
             OUVRE#{id}
             {header ? <div style={{ marginTop: "4px" }}>{header}</div> : null}
           </div>
+        </div>
 
-          <div style={{ flex: 1 }} />
-
+        {/* links start at 40% and grow downward */}
+        <div
+          style={{
+            position: "absolute",
+            top: "40%",
+            left: 0,
+            right: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <ul className="list-none p-0 m-0 flex flex-col items-center" style={{ gap: "0px" }}>
             {rows.length === 0 ? (
               <li style={{ ...linkStyle, fontSize: "24px" }}>No links yet.</li>
@@ -87,8 +97,6 @@ export function DuckSkin({ id, links, onRequestEdit }: SkinProps) {
               })
             )}
           </ul>
-
-          <div style={{ flex: "0 0 8%" }} />
         </div>
 
         {onRequestEdit ? (
