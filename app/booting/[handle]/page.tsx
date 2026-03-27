@@ -14,7 +14,7 @@ function BootingScreen() {
   return (
     <BootScreen
       id={cardId}
-      onComplete={() => router.replace(`/${handle}?edit=true`)}
+      onComplete={() => router.replace(`/${handle}?from=boot`)}
     />
   );
 }

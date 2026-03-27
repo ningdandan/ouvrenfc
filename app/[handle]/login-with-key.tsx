@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { loginWithKey } from "./actions";
+import { getErrorMessage, isRetryableError } from "../link/error-map";
+import type { ActionErrorCode } from "../link/types";
 import {
   BackroomPanelSection,
   BackroomFormContent,
@@ -20,17 +22,20 @@ type Props = {
 export function LoginWithKey({ handle, onSuccess, onCancel }: Props) {
   const [cardKey, setCardKey] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<ActionErrorCode | undefined>();
   const [isPending, startTransition] = useTransition();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
     setError(null);
+    setErrorCode(undefined);
     startTransition(async () => {
       const result = await loginWithKey(handle, cardKey);
       if (result.success) {
         onSuccess();
       } else {
-        setError(result.error);
+        setError(getErrorMessage(result.code, result.error));
+        setErrorCode(result.code);
       }
     });
   };
@@ -50,16 +55,27 @@ export function LoginWithKey({ handle, onSuccess, onCancel }: Props) {
                 type="text"
                 value={cardKey}
                 onChange={(e) => setCardKey(e.target.value.toUpperCase())}
-                placeholder="ART-XXXX"
+                placeholder="OVR-XXXX"
                 autoComplete="off"
                 spellCheck={false}
               />
             </BackroomField>
 
             {error && (
-              <p className="text-sm text-red-600 text-center" role="alert">
-                {error}
-              </p>
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-sm text-red-600 text-center" role="alert">
+                  {error}
+                </p>
+                {isRetryableError(errorCode) && (
+                  <button
+                    type="button"
+                    onClick={() => handleSubmit()}
+                    className="text-xs text-white/40 underline underline-offset-2 active:scale-95 transition-transform"
+                  >
+                    try again
+                  </button>
+                )}
+              </div>
             )}
 
             <BackroomSubmitButton

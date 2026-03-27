@@ -26,12 +26,16 @@ export function useNetworkStatus() {
       setIsSlowNetwork(connection.isSlowNetwork);
     };
 
+    const conn = (navigator as Navigator & { connection?: NavigatorConnection }).connection;
+
     refresh();
     window.addEventListener("online", refresh);
     window.addEventListener("offline", refresh);
+    conn?.addEventListener("change", refresh);
     return () => {
       window.removeEventListener("online", refresh);
       window.removeEventListener("offline", refresh);
+      conn?.removeEventListener("change", refresh);
     };
   }, []);
 

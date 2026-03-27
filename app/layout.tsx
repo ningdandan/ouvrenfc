@@ -3,7 +3,7 @@ import "./globals.css";
 import { NetworkToast } from "./network-toast";
 
 export const metadata: Metadata = {
-  title: "Industrial NFC Link",
+  title: "ouvre connect",
   description: "Dynamic landing for Ouvre NFC",
 };
 

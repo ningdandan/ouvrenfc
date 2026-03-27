@@ -14,6 +14,7 @@ export function ProfileView({ handle, user, onRequestEdit }: Props) {
     <SkinRenderer
       skinId={user.theme}
       id={user.id}
+      handle={handle}
       links={[
         ...(user.spaceName ? [{ type: "header", value: user.spaceName }] : []),
         ...user.socialLinks,

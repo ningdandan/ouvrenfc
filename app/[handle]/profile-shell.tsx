@@ -13,9 +13,11 @@ type Props = {
   user: UserRecord;
   isOwner: boolean;
   openEdit?: boolean;
+  fromBoot?: boolean;
 };
 
-export function ProfileShell({ handle, user, isOwner, openEdit = false }: Props) {
+export function ProfileShell({ handle, user, isOwner, openEdit = false, fromBoot = false }: Props) {
+  const [canEdit, setCanEdit] = useState(isOwner);
   const [mode, setMode] = useState<Mode>(() => {
     if (openEdit && isOwner) return "edit";
     return "public";
@@ -23,7 +25,7 @@ export function ProfileShell({ handle, user, isOwner, openEdit = false }: Props)
   const [currentUser, setCurrentUser] = useState<UserRecord>(user);
 
   const handleEditClick = () => {
-    if (isOwner) {
+    if (canEdit) {
       setMode("edit");
     } else {
       setMode("login");
@@ -35,8 +37,8 @@ export function ProfileShell({ handle, user, isOwner, openEdit = false }: Props)
       <LoginWithKey
         handle={handle}
         onSuccess={() => {
-          // After re-login the cookie is set; reload to get isOwner=true from server
-          window.location.reload();
+          setCanEdit(true);
+          setMode("edit");
         }}
         onCancel={() => setMode("public")}
       />
@@ -58,10 +60,18 @@ export function ProfileShell({ handle, user, isOwner, openEdit = false }: Props)
   }
 
   return (
-    <ProfileView
-      handle={handle}
-      user={currentUser}
-      onRequestEdit={handleEditClick}
-    />
+    <>
+      {fromBoot && (
+        <div
+          className="fixed inset-0 z-50 bg-black pointer-events-none"
+          style={{ animation: "fadeOut 0.7s ease-out 0.05s forwards" }}
+        />
+      )}
+      <ProfileView
+        handle={handle}
+        user={currentUser}
+        onRequestEdit={handleEditClick}
+      />
+    </>
   );
 }

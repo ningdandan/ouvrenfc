@@ -2,6 +2,7 @@
 
 import type { SkinProps } from "@/app/link/types";
 import { getSocialHref } from "@/app/link/social-url";
+import { trackClick } from "./track-click";
 
 const linkStyle: React.CSSProperties = {
   textAlign: "center",
@@ -18,7 +19,7 @@ const linkStyle: React.CSSProperties = {
   textDecoration: "none",
 };
 
-export function DuckSkin({ id, links, onRequestEdit }: SkinProps) {
+export function DuckSkin({ id, handle, links, onRequestEdit }: SkinProps) {
   const header = links.find((l) => l.type === "header")?.value?.trim() ?? "";
   const rows = links.filter((l) => l.type !== "header");
 
@@ -55,7 +56,7 @@ export function DuckSkin({ id, links, onRequestEdit }: SkinProps) {
               color: "#fff",
               WebkitTextStrokeWidth: "1px",
               WebkitTextStrokeColor: "#000",
-              letterSpacing: "0.05em",
+              // letterSpacing: "0.05em",
               textAlign: "center",
             }}
           >
@@ -89,6 +90,7 @@ export function DuckSkin({ id, links, onRequestEdit }: SkinProps) {
                       style={linkStyle}
                       className="active:scale-95 transition-transform"
                       aria-label={link.type}
+                      onClick={() => handle && trackClick(handle, link.type)}
                     >
                       {link.type}
                     </a>

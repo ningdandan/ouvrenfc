@@ -2,6 +2,7 @@
 
 import type { SkinProps } from "@/app/link/types";
 import { getSocialHref } from "@/app/link/social-url";
+import { trackClick } from "./track-click";
 import "./eva.css";
 
 const HEX_POSITIONS = [
@@ -13,7 +14,7 @@ const HEX_POSITIONS = [
   "eva-hex-pos-6",
 ] as const;
 
-export function EvaSkin({ id, links, onRequestEdit }: SkinProps) {
+export function EvaSkin({ id, handle, links, onRequestEdit }: SkinProps) {
   const header = links.find((l) => l.type === "header")?.value?.trim() ?? "";
   const rows = links.filter((l) => l.type !== "header").slice(0, 6);
 
@@ -242,6 +243,7 @@ export function EvaSkin({ id, links, onRequestEdit }: SkinProps) {
                         target: "_blank",
                         rel: "noopener noreferrer",
                       })}
+                      onClick={() => handle && trackClick(handle, link.type)}
                     >
                       <div className="eva-hex-arrow-top" />
                       <span className="eva-hex-label eva-hex-link-label">

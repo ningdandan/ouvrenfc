@@ -57,7 +57,7 @@ export async function activateCard(
     const userRecord: UserRecord = {
       id,
       spaceName: trimmedHandle,
-      socialLinks: [{ type: "instagram", value: "" }],
+      socialLinks: [],
       theme: defaultTheme,
     };
     const updatedCard: CardRecord = {

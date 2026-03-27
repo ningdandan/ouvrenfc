@@ -4,6 +4,10 @@ const SOCIAL_IMAGES: Record<string, string> = {
   snapchat: "/snapchat.png",
   phone: "/phone.png",
   website: "/website.png",
+  onlyfans: "/onlyfans.png",
+  soundcloud: "/soundcloud.png",
+  arena: "/arena.png",
+  "are.na": "/arena.png",
   default: "/button_round.png",
 };
 

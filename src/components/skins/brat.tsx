@@ -2,9 +2,10 @@
 
 import type { SkinProps } from "@/app/link/types";
 import { getSocialHref } from "@/app/link/social-url";
+import { trackClick } from "./track-click";
 import "./brat.css";
 
-export function BratSkin({ id, links, onRequestEdit }: SkinProps) {
+export function BratSkin({ id, handle, links, onRequestEdit }: SkinProps) {
   const header = links.find((l) => l.type === "header")?.value?.trim() ?? "";
   const rows = links.filter((l) => l.type !== "header");
 
@@ -16,7 +17,12 @@ export function BratSkin({ id, links, onRequestEdit }: SkinProps) {
             {header}
           </div>
           <div className="text-[24px] leading-none whitespace-nowrap">
-            ouvre#{id}
+            <a
+              href="https://ouvre.nyc"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >ouvre</a>#{id}
           </div>
         </div>
 
@@ -33,6 +39,7 @@ export function BratSkin({ id, links, onRequestEdit }: SkinProps) {
                       href={href}
                       className="w-full flex flex-col items-start justify-center gap-1 active:scale-95 transition-transform"
                       aria-label={link.type}
+                      onClick={() => handle && trackClick(handle, link.type)}
                     >
                       <div
                         className="brat-link-wordWrap text-[clamp(48px,10vw,72px)] leading-[0.85]"

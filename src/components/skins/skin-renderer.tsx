@@ -26,13 +26,14 @@ export function SkinRenderer({
   skinId,
   links,
   id,
+  handle,
   onRequestEdit,
 }: SkinRendererProps) {
   if (skinId === "windowsxp") {
     return (
-      <WindowsXPSkin id={id} links={links} onRequestEdit={onRequestEdit} />
+      <WindowsXPSkin id={id} handle={handle} links={links} onRequestEdit={onRequestEdit} />
     );
   }
   const Skin = SKINS[skinId];
-  return <Skin id={id} links={links} onRequestEdit={onRequestEdit} />;
+  return <Skin id={id} handle={handle} links={links} onRequestEdit={onRequestEdit} />;
 }

@@ -22,6 +22,7 @@ export type SkinId = "windowsxp" | "bw-test" | "brat" | "eva" | "duck";
 export type SkinProps = {
   links: SocialLink[];
   id: string;
+  handle?: string;
   onRequestEdit?: () => void;
 };
 
