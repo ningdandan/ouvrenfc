@@ -6,6 +6,7 @@ import { BWSkin } from "./BWSkin";
 import { BratSkin } from "./brat";
 import { DuckSkin } from "./duck";
 import { EvaSkin } from "./eva";
+import { OuvreSkin } from "./ouvre";
 import { WindowsXPSkin } from "./windowsxp";
 
 function WindowsXPSkinAdapter(props: SkinProps) {
@@ -18,6 +19,7 @@ export const SKINS: Record<SkinId, ComponentType<SkinProps>> = {
   brat: BratSkin,
   eva: EvaSkin,
   duck: DuckSkin,
+  ouvre: OuvreSkin,
 };
 
 export type SkinRendererProps = SkinProps & { skinId: SkinId };

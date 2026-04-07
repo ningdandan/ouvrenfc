@@ -2,6 +2,24 @@ import type { ActionErrorCode, ActionResult } from "./types";
 
 export function mapKvError(error: unknown): { error: string; code: ActionErrorCode } {
   const message = error instanceof Error ? error.message.toLowerCase() : "";
+  if (message.includes("jwt_secret") && message.includes("is not set")) {
+    // #region agent log
+    fetch("http://127.0.0.1:7701/ingest/2e071bb6-0524-4db4-872c-293a76a7eaab", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "60d044" },
+      body: JSON.stringify({
+        sessionId: "60d044",
+        runId: "pre-fix",
+        hypothesisId: "H9",
+        location: "app/link/actions.ts:mapKvError:config_error",
+        message: "error mapped to config error due to missing JWT secret",
+        data: { hasError: Boolean(error), messageSnippet: message.slice(0, 120) },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
+    return { error: "Server is missing required auth configuration.", code: "CONFIG_ERROR" };
+  }
   if (message.includes("timeout") || message.includes("timed out")) {
     // #region agent log
     fetch("http://127.0.0.1:7701/ingest/2e071bb6-0524-4db4-872c-293a76a7eaab", {

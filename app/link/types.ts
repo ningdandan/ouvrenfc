@@ -17,7 +17,7 @@ export type SocialLink = {
   value: string;
 };
 
-export type SkinId = "windowsxp" | "bw-test" | "brat" | "eva" | "duck";
+export type SkinId = "windowsxp" | "bw-test" | "brat" | "eva" | "duck" | "ouvre";
 
 export type SkinProps = {
   links: SocialLink[];
@@ -46,6 +46,7 @@ export const ACTION_ERROR_CODES = [
   "UNAUTHORIZED",
   "NOT_FOUND",
   "ALREADY_EXISTS",
+  "CONFIG_ERROR",
   "KV_TIMEOUT",
   "KV_RATE_LIMIT",
   "INTERNAL_ERROR",

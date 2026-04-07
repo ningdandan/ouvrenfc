@@ -1,0 +1,53 @@
+.skin-ouvre {
+  position: relative;
+  color: #ffffff;
+  background-color: #000;
+  overflow: hidden;
+}
+
+.ouvre-bg-video-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ouvre-bg-video {
+  width: 72%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  transform: translateY(-28%);
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  filter: brightness(1.45) contrast(2.1);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 66%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 66%, transparent 100%);
+}
+
+.ouvre-stars-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("/ouvre.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.45;
+  mix-blend-mode: screen;
+}
+
+.ouvre-title {
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+.ouvre-link {
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.35);
+}
+

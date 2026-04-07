@@ -16,7 +16,7 @@ export function BWSkin({ id, handle, links }: SkinProps) {
           target="_blank"
           rel="noopener noreferrer"
           style={{ textDecoration: "none", color: "inherit" }}
-        >ouvre</a>{" "}{id}
+        >ouvre.nyc</a>{" "}{id}
       </p>
       {header ? <p className="text-base font-sans">{header}</p> : null}
       <ul className="list-none p-0 m-0 flex flex-col gap-2 font-sans">

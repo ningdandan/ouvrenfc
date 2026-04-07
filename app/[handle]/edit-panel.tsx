@@ -17,6 +17,7 @@ type Props = {
 
 const SKIN_OPTIONS: { id: SkinId; label: string; image: string }[] = [
   { id: "windowsxp", label: "Windows XP", image: "/skinpicker/winxp.webp" },
+  { id: "ouvre",     label: "Ouvre",      image: "/ouvre.webp" },
   { id: "brat",      label: "Brat",       image: "/skinpicker/brat.webp" },
   { id: "eva",       label: "EVA",        image: "/skinpicker/eva.webp" },
   { id: "duck",      label: "Duck",       image: "/skinpicker/duffy.webp" },

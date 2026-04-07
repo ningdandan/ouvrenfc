@@ -60,7 +60,15 @@ export function DuckSkin({ id, handle, links, onRequestEdit }: SkinProps) {
               textAlign: "center",
             }}
           >
-            OUVRE#{id}
+            <a
+              href="https://ouvre.nyc"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              OUVRE
+            </a>
+            #{id}
             {header ? <div style={{ marginTop: "4px" }}>{header}</div> : null}
           </div>
         </div>

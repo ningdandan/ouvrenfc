@@ -216,7 +216,16 @@ export function EvaSkin({ id, handle, links, onRequestEdit }: SkinProps) {
 
             <div className="eva-tactical-box px-6 py-2 mb-2 text-center">
               <div className="text-[9px] text-[#ff6600] mb-1">
-                ウーヴル_{id.padStart(5, "0")} // OUVRE_{id.padStart(5, "0")}
+                ウーヴル_{id.padStart(5, "0")}{" // "}
+                <a
+                  href="https://ouvre.nyc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
+                  OUVRE
+                </a>
+                _{id.padStart(5, "0")}
               </div>
               <h1 className="text-2xl font-bold text-[#ff3333] tracking-widest eva-crt-glow-red m-0">
                 {header || id}

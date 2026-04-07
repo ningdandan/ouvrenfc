@@ -16,6 +16,8 @@ export function getErrorMessage(code: ActionErrorCode, fallback?: string): strin
       return "Ouvre data not found.";
     case "ALREADY_EXISTS":
       return "This ouvre is already activated.";
+    case "CONFIG_ERROR":
+      return "Server auth config is missing. Please contact support.";
     case "KV_TIMEOUT":
       return "Network is slow. Request timed out.";
     case "KV_RATE_LIMIT":

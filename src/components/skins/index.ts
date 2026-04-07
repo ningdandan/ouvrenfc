@@ -4,6 +4,7 @@ export { BWSkin } from "./BWSkin";
 export { DuckSkin } from "./duck";
 export { EvaSkin } from "./eva";
 export { BratSkin } from "./brat";
+export { OuvreSkin } from "./ouvre";
 export { BackroomShell } from "./backroom";
 export { WindowsXPSkin } from "./windowsxp";
 export type { WindowsXPSkinProps } from "./windowsxp";
