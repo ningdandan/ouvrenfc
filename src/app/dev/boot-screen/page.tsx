@@ -1,1 +1,1 @@
-export { default } from "../../../../../app/dev/boot-screen/page";
+export { default } from "../../../../app/dev/boot-screen/page";

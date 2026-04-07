@@ -1,1 +1,1 @@
-export { default } from "../../../../../app/booting/[handle]/page";
+export { default } from "../../../../app/booting/[handle]/page";

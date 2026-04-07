@@ -1,1 +1,1 @@
-export { revalidate, default } from "../../../../../app/activate/[id]/page";
+export { revalidate, default } from "../../../../app/activate/[id]/page";

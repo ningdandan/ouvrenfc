@@ -1,1 +1,1 @@
-export { default } from "../../../../app/test-skin/page";
+export { default } from "../../../app/test-skin/page";
