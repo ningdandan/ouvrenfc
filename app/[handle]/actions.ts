@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { kv } from "@vercel/kv";
 import { signToken, verifyToken } from "@/lib/jwt";
@@ -22,6 +23,18 @@ export async function loginWithKey(
 ): Promise<ActionResult> {
   const trimmedHandle = handle.trim().toLowerCase();
   const trimmedKey = cardKey.trim().toUpperCase();
+  const headersList = await headers();
+  // #region agent log
+  console.info("[DBG60d044][H6] loginWithKey entry", {
+    handleLength: trimmedHandle.length,
+    keyLength: trimmedKey.length,
+    nodeEnv: process.env.NODE_ENV,
+    vercelEnv: process.env.VERCEL_ENV ?? "unknown",
+    host: headersList.get("host"),
+    origin: headersList.get("origin"),
+    proto: headersList.get("x-forwarded-proto"),
+  });
+  // #endregion
   // #region agent log
   fetch("http://127.0.0.1:7701/ingest/2e071bb6-0524-4db4-872c-293a76a7eaab", {
     method: "POST",
@@ -77,6 +90,14 @@ export async function loginWithKey(
       path: "/",
     });
     // #region agent log
+    console.info("[DBG60d044][H7] loginWithKey cookie written", {
+      secureCookie: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      handleLength: trimmedHandle.length,
+    });
+    // #endregion
+    // #region agent log
     fetch("http://127.0.0.1:7701/ingest/2e071bb6-0524-4db4-872c-293a76a7eaab", {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "60d044" },
@@ -94,6 +115,15 @@ export async function loginWithKey(
 
     return { success: true };
   } catch (error) {
+    // #region agent log
+    console.error("[DBG60d044][H8] loginWithKey catch", {
+      errorName: error instanceof Error ? error.name : "unknown",
+      errorMessage: error instanceof Error ? error.message : String(error),
+      nodeEnv: process.env.NODE_ENV,
+      vercelEnv: process.env.VERCEL_ENV ?? "unknown",
+      handleLength: trimmedHandle.length,
+    });
+    // #endregion
     // #region agent log
     fetch("http://127.0.0.1:7701/ingest/2e071bb6-0524-4db4-872c-293a76a7eaab", {
       method: "POST",
@@ -123,11 +153,30 @@ export async function updateProfile(
   updates: { spaceName?: string; socialLinks?: SocialLink[]; theme?: SkinId }
 ): Promise<ActionResult> {
   const trimmedHandle = handle.trim().toLowerCase();
+  const headersList = await headers();
+  // #region agent log
+  console.info("[DBG60d044][H6] updateProfile entry", {
+    handleLength: trimmedHandle.length,
+    hasSpaceName: updates.spaceName !== undefined,
+    linksCount: updates.socialLinks?.length ?? 0,
+    hasTheme: updates.theme !== undefined,
+    host: headersList.get("host"),
+    origin: headersList.get("origin"),
+    proto: headersList.get("x-forwarded-proto"),
+  });
+  // #endregion
 
   // Verify the caller is authenticated for this handle
   const cookieStore = await cookies();
   const tokenValue = cookieStore.get("auth_token")?.value;
   if (!tokenValue) {
+    // #region agent log
+    console.warn("[DBG60d044][H7] updateProfile missing auth cookie", {
+      handleLength: trimmedHandle.length,
+      nodeEnv: process.env.NODE_ENV,
+      vercelEnv: process.env.VERCEL_ENV ?? "unknown",
+    });
+    // #endregion
     // #region agent log
     fetch("http://127.0.0.1:7701/ingest/2e071bb6-0524-4db4-872c-293a76a7eaab", {
       method: "POST",
@@ -148,6 +197,13 @@ export async function updateProfile(
 
   const payload = await verifyToken(tokenValue);
   if (!payload || payload.handle !== trimmedHandle) {
+    // #region agent log
+    console.warn("[DBG60d044][H7] updateProfile token mismatch", {
+      hasPayload: Boolean(payload),
+      payloadHandleMatches: payload?.handle === trimmedHandle,
+      handleLength: trimmedHandle.length,
+    });
+    // #endregion
     // #region agent log
     fetch("http://127.0.0.1:7701/ingest/2e071bb6-0524-4db4-872c-293a76a7eaab", {
       method: "POST",
@@ -201,6 +257,13 @@ export async function updateProfile(
     // #endregion
     return { success: true };
   } catch (error) {
+    // #region agent log
+    console.error("[DBG60d044][H8] updateProfile catch", {
+      errorName: error instanceof Error ? error.name : "unknown",
+      errorMessage: error instanceof Error ? error.message : String(error),
+      handleLength: trimmedHandle.length,
+    });
+    // #endregion
     // #region agent log
     fetch("http://127.0.0.1:7701/ingest/2e071bb6-0524-4db4-872c-293a76a7eaab", {
       method: "POST",
