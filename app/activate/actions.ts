@@ -7,7 +7,7 @@ import { signToken } from "@/lib/jwt";
 import type { CardRecord, UserRecord, ActionResult, SkinId } from "../link/types";
 import { failure, mapKvError } from "../link/actions";
 
-const VALID_ID_REGEX = /^00(0(0[1-9]|[1-9][0-9])|100)$/;
+const VALID_ID_REGEX = /^(0000[1-9]|000[1-9][0-9]|00[1-2][0-9]{2}|00300)$/;
 const HANDLE_REGEX = /^[a-z0-9_]{1,30}$/;
 
 export type ActivateCardResult = ActionResult;

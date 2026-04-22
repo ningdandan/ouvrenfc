@@ -3,7 +3,7 @@ import { kv } from "@vercel/kv";
 import type { CardRecord } from "../../link/types";
 import { ActivateForm } from "./activate-form";
 
-const VALID_ID_REGEX = /^00(0(0[1-9]|[1-9][0-9])|100)$/;
+const VALID_ID_REGEX = /^(0000[1-9]|000[1-9][0-9]|00[1-2][0-9]{2}|00300)$/;
 
 export const revalidate = 0;
 
@@ -29,5 +29,10 @@ export default async function ActivatePage({
     redirect(`/${card.handle}`);
   }
 
-  return <ActivateForm id={id} />;
+  return (
+    <>
+      <div data-activate-page="true" className="hidden" />
+      <ActivateForm id={id} />
+    </>
+  );
 }

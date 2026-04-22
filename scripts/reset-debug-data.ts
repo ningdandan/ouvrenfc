@@ -52,7 +52,7 @@ async function main() {
 
   // 2. Reset active cards back to inactive (keep key/卡密)
   let resetCount = 0;
-  for (let i = 1; i <= 100; i++) {
+  for (let i = 1; i <= 300; i++) {
     const id = String(i).padStart(5, "0");
     const kvKey = `card:${id}`;
     const rec = await kv.get<CardRecord>(kvKey);

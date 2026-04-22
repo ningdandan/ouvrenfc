@@ -1,8 +1,8 @@
 /**
- * Seed script: pre-generates card records for IDs 00001–00100 in Vercel KV.
+ * Seed script: pre-generates card records for IDs 00101–00300 in Vercel KV.
  * Each card gets a random key in the format OVR-XXXX using an unambiguous
  * character set (no I, L, O, 0, 1 to avoid visual confusion).
- * All existing fields (status, handle, etc.) are preserved — only the key is updated.
+ * Existing records are never overwritten, so 00001–00100 stay untouched.
  *
  * Usage (from project root):
  *   npx tsx scripts/seed-cards.ts
@@ -56,26 +56,31 @@ function padId(n: number): string {
 
 async function main() {
   let seeded = 0;
+  let skipped = 0;
 
-  for (let i = 1; i <= 100; i++) {
+  for (let i = 101; i <= 300; i++) {
     const id = padId(i);
     const kvKey = `card:${id}`;
 
     const existing = await kv.get<CardRecord>(kvKey);
+    if (existing) {
+      console.log(`[SKIP]  ${kvKey} already exists`);
+      skipped++;
+      continue;
+    }
 
-    // Always generate a fresh OVR-XXXX key; preserve all other fields
+    // Create only missing cards to avoid modifying existing keys/data
     const cardKey = randomKey();
     const record: CardRecord = {
-      ...(existing ?? { status: "inactive" }),
+      status: "inactive",
       key: cardKey,
     };
     await kv.set(kvKey, record);
-    const tag = existing?.status === "active" ? "[UPDATE-ACTIVE]" : "[SEED]";
-    console.log(`${tag}  ${kvKey} → key: ${cardKey}${existing?.handle ? ` (handle: ${existing.handle})` : ""}`);
+    console.log(`[SEED]  ${kvKey} → key: ${cardKey}`);
     seeded++;
   }
 
-  console.log(`\nDone. Updated: ${seeded}`);
+  console.log(`\nDone. Created: ${seeded}, Skipped(existing): ${skipped}`);
 }
 
 main().catch((err) => {

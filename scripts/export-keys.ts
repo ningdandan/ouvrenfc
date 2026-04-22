@@ -20,7 +20,7 @@ type CardRecord = { status: string; key: string; handle?: string };
 
 async function main() {
   const rows: string[] = ["编号       密码         状态       Handle", "─".repeat(50)];
-  for (let i = 1; i <= 100; i++) {
+  for (let i = 1; i <= 300; i++) {
     const id = String(i).padStart(5, "0");
     const rec = await kv.get<CardRecord>(`card:${id}`);
     const key = rec?.key ?? "N/A";

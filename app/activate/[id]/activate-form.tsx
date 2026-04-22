@@ -48,7 +48,7 @@ export function ActivateForm({ id }: Props) {
               <button
                 type="button"
                 onClick={() => setStep("form")}
-                className="techno-tremor tracking-[0.05em] text-black active:scale-95"
+                className="techno-tremor tracking-[0.05em] text-[var(--tw-ring-offset-color)] active:scale-95"
               >
                 unlock ouvre
               </button>

@@ -4,7 +4,7 @@ import { after } from "next/server";
 import { kv } from "@vercel/kv";
 import type { CardRecord } from "../types";
 
-const VALID_ID_REGEX = /^00(0(0[1-9]|[1-9][0-9])|100)$/;
+const VALID_ID_REGEX = /^(0000[1-9]|000[1-9][0-9]|00[1-2][0-9]{2}|00300)$/;
 
 /** 模糊化 IP：IPv4 末段归零，IPv6 只保留前四组 */
 function fuzzyIp(raw: string): string {

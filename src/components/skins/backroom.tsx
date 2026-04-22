@@ -149,7 +149,7 @@ export function BackroomSubmitButton({
           disabled={!isReady || disabled}
           className={[
             "tracking-[0.05em] active:scale-95 transition-transform",
-            isReady ? "techno-tremor text-black" : "text-black/30",
+            isReady ? "techno-tremor text-white" : "text-white/30",
           ].join(" ")}
         >
           {children}
