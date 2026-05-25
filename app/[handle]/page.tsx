@@ -40,7 +40,7 @@ export default async function HandlePage({
 
   if (kvError) {
     return (
-      <main className="min-h-[100svh] flex flex-col items-center justify-center gap-3 px-6 text-center">
+      <main className="min-h-[100svh] min-h-dvh flex flex-col items-center justify-center gap-3 px-6 text-center">
         <p className="text-sm text-white/60">service temporarily unavailable</p>
         <p className="text-xs text-white/30">please try again in a moment</p>
       </main>
@@ -80,7 +80,7 @@ export default async function HandlePage({
   }
 
   return (
-    <main className="min-h-[100svh] flex flex-col">
+    <main className="min-h-[100svh] min-h-dvh flex flex-col">
       <ProfileShell
         handle={handle}
         user={user}
