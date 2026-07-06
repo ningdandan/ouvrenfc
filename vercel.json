@@ -2,11 +2,45 @@
   "redirects": [
     {
       "source": "/activate/:id",
+      "has": [
+        {
+          "type": "host",
+          "value": "wetmarket.art"
+        }
+      ],
       "destination": "https://fan.wetmarket.art/activate/:id",
       "permanent": true
     },
     {
-      "source": "/:username",
+      "source": "/activate/:id",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.wetmarket.art"
+        }
+      ],
+      "destination": "https://fan.wetmarket.art/activate/:id",
+      "permanent": true
+    },
+    {
+      "source": "/:username((?!activate$)(?!.*\\.).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "wetmarket.art"
+        }
+      ],
+      "destination": "https://fan.wetmarket.art/:username",
+      "permanent": true
+    },
+    {
+      "source": "/:username((?!activate$)(?!.*\\.).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.wetmarket.art"
+        }
+      ],
       "destination": "https://fan.wetmarket.art/:username",
       "permanent": true
     }
