@@ -2,12 +2,12 @@
   "redirects": [
     {
       "source": "/activate/:id",
-      "destination": "https://wetmarket.art/fan/activate/:id",
+      "destination": "https://fan.wetmarket.art/activate/:id",
       "permanent": true
     },
     {
-      "source": "/:username((?!activate$)(?!.*\\.).*)",
-      "destination": "https://wetmarket.art/fan/:username",
+      "source": "/:username",
+      "destination": "https://fan.wetmarket.art/:username",
       "permanent": true
     }
   ]
