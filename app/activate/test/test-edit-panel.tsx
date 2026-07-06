@@ -23,7 +23,6 @@ type Props = {
 
 const SKIN_OPTIONS: { id: SkinId; label: string; image: string }[] = [
   { id: "windowsxp", label: "Windows XP", image: "/skinpicker/winxp.webp" },
-  { id: "ouvre", label: "Ouvre", image: "/ouvre.webp" },
   { id: "brat", label: "Brat", image: "/skinpicker/brat.webp" },
   { id: "eva", label: "EVA", image: "/skinpicker/eva.webp" },
   { id: "duck", label: "Duck", image: "/skinpicker/duffy.webp" },
@@ -150,12 +149,12 @@ export function TestEditPanel({ handle, user, onSaved, onCancel }: Props) {
         <div className="flex items-center justify-between px-6 pt-6">
           <p className="text-[10px] tracking-[0.1em] text-white/50">
             <a
-              href="https://ouvre.nyc"
+              href="https://wetmarket.art"
               target="_blank"
               rel="noopener noreferrer"
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              ouvre
+              wet market
             </a>{" "}
             #{cardId}
           </p>

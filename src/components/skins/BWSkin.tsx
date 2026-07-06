@@ -12,11 +12,11 @@ export function BWSkin({ id, handle, links }: SkinProps) {
     <div className="min-h-[100svh] min-h-dvh bg-white text-black font-sans p-6 flex flex-col gap-4">
       <p className="text-sm font-sans">
         <a
-          href="https://ouvre.nyc"
+          href="https://wetmarket.art"
           target="_blank"
           rel="noopener noreferrer"
           style={{ textDecoration: "none", color: "inherit" }}
-        >ouvre.nyc</a>{" "}{id}
+        >wetmarket.art</a>{" "}{id}
       </p>
       {header ? <p className="text-base font-sans">{header}</p> : null}
       <ul className="list-none p-0 m-0 flex flex-col gap-2 font-sans">

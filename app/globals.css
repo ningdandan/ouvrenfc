@@ -39,8 +39,8 @@ body {
 }
 
 /* Center the global footer link on home and activate pages only. */
-body:has([data-home-page="true"]) .powered-by-ouvre,
-body:has([data-activate-page="true"]) .powered-by-ouvre {
+body:has([data-home-page="true"]) .powered-by-wet-market,
+body:has([data-activate-page="true"]) .powered-by-wet-market {
   left: 50%;
   transform: translateX(-50%);
 }

@@ -35,12 +35,12 @@ export function WindowsXPSkin({ id, handle, links, onRequestEdit }: WindowsXPSki
       <div className="flex flex-1 flex-col items-center justify-center gap-8 p-6">
         <p className="text-sm drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]">
           <a
-            href="https://ouvre.nyc"
+            href="https://wetmarket.art"
             target="_blank"
             rel="noopener noreferrer"
             className="no-underline text-inherit"
             style={{ textDecoration: "none" }}
-          >ouvre</a>{" "}{id}
+          >wet market</a>{" "}{id}
         </p>
         {header ? (
           <p className="text-lg drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]">

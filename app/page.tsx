@@ -9,10 +9,10 @@ export default function HomePage() {
       <BackroomPanel>
         <div className="absolute z-10 left-1/2 top-[75%] -translate-x-1/2 flex flex-col items-center">
           <a
-            href="https://www.ouvre.nyc"
+            href="https://wetmarket.art"
             className="text-2xl tracking-[0.05em] text-black active:scale-95 transition-transform"
           >
-            unlock ouvre
+            unlock wet market
           </a>
         </div>
       </BackroomPanel>

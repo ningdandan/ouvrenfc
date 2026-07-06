@@ -61,12 +61,12 @@ export function DuckSkin({ id, handle, links, onRequestEdit }: SkinProps) {
             }}
           >
             <a
-              href="https://ouvre.nyc"
+              href="https://wetmarket.art"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "inherit", textDecoration: "none" }}
             >
-              OUVRE
+              WET MARKET
             </a>
             #{id}
             {header ? <div style={{ marginTop: "4px" }}>{header}</div> : null}

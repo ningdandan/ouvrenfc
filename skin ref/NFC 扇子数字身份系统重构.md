@@ -45,7 +45,7 @@ type UserRecord \= {
 
 ### **3.1 NCF 触碰入口：/link/\[id\]**
 
-* **物理写入链接:** link.ouvre.nyc/link/00001  
+* **物理写入链接:** wetmarket.art/link/00001  
 * **后端逻辑 (Server端处理):**  
   1. 提取 URL 参数 id 并校验正则 ^00(0(0\[1-9\]|\[1-9\]\[0-9\])|100)$。  
   2. 查询 KV: GET card:\[id\]。  

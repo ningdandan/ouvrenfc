@@ -218,12 +218,12 @@ export function EvaSkin({ id, handle, links, onRequestEdit }: SkinProps) {
               <div className="text-[9px] text-[#ff6600] mb-1">
                 ウーヴル_{id.padStart(5, "0")}{" // "}
                 <a
-                  href="https://ouvre.nyc"
+                  href="https://wetmarket.art"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: "inherit", textDecoration: "none" }}
                 >
-                  OUVRE
+                  WET MARKET
                 </a>
                 _{id.padStart(5, "0")}
               </div>

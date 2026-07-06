@@ -74,7 +74,7 @@ export default function ActivateTestPage() {
                 onClick={() => setStep("form")}
                 className="techno-tremor tracking-[0.05em] text-[var(--tw-ring-offset-color)] active:scale-95"
               >
-                unlock ouvre
+                unlock wet market
               </button>
             </span>
           </div>
@@ -145,7 +145,7 @@ export default function ActivateTestPage() {
         <div data-activate-page="true" className="hidden" />
         <BackroomFormContent>
           <div className="w-[80%] flex flex-col gap-6">
-            <BackroomPageTitle>ouvre#test</BackroomPageTitle>
+            <BackroomPageTitle>wet market#test</BackroomPageTitle>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <BackroomField label="card key">

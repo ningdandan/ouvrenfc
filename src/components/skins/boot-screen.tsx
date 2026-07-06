@@ -20,7 +20,7 @@ const EXIT_MS = 600;
 
 export function BootScreen({ id, onComplete, duration = 1800 }: Props) {
   const [exiting, setExiting] = useState(false);
-  const line = `ouvre#${id} is unlocked`;
+  const line = `wet market#${id} is unlocked`;
 
   useEffect(() => {
     const exitTimer = setTimeout(() => setExiting(true), duration);

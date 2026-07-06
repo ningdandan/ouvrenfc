@@ -31,15 +31,15 @@ export function OuvreSkin({ id, handle, links, onRequestEdit }: SkinProps) {
         <div className="ouvre-stars-overlay" />
 
         <div className="relative z-10 flex items-start justify-between px-6 pt-10 text-white/75 text-[14px]">
-          <p className="ouvre-title leading-none">{header || "ouvre"}</p>
+          <p className="ouvre-title leading-none">{header || "wet market"}</p>
           <p className="ouvre-title leading-none">
             <a
-              href="https://ouvre.nyc"
+              href="https://wetmarket.art"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "inherit", textDecoration: "none" }}
             >
-              ouvre
+              wet market
             </a>
             #{id}
           </p>

@@ -18,11 +18,11 @@ export function BratSkin({ id, handle, links, onRequestEdit }: SkinProps) {
           </div>
           <div className="text-[24px] leading-none whitespace-nowrap">
             <a
-              href="https://ouvre.nyc"
+              href="https://wetmarket.art"
               target="_blank"
               rel="noopener noreferrer"
               style={{ textDecoration: "none", color: "inherit" }}
-            >ouvre</a>#{id}
+            >wet market</a>#{id}
           </div>
         </div>
 

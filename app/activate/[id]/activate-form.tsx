@@ -50,7 +50,7 @@ export function ActivateForm({ id }: Props) {
                 onClick={() => setStep("form")}
                 className="techno-tremor tracking-[0.05em] text-[var(--tw-ring-offset-color)] active:scale-95"
               >
-                unlock ouvre
+                unlock fan
               </button>
             </span>
           </div>
@@ -64,7 +64,7 @@ export function ActivateForm({ id }: Props) {
       <BackroomPanel>
         <BackroomFormContent>
           <div className="w-[80%] flex flex-col gap-6">
-            <BackroomPageTitle>ouvre#{id}</BackroomPageTitle>
+            <BackroomPageTitle>fan#{id}</BackroomPageTitle>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <BackroomField label="card key">

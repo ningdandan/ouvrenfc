@@ -6,8 +6,8 @@ import { Space_Grotesk } from "next/font/google";
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ouvre connect",
-  description: "Dynamic landing for Ouvre NFC",
+  title: "wet market connect",
+  description: "Dynamic landing for wet market NFC",
 };
 
 export default function RootLayout({
@@ -23,12 +23,12 @@ export default function RootLayout({
         <div className="fixed inset-0 z-[100] pointer-events-none">
           <div className="w-full max-w-[420px] mx-auto h-full relative">
             <a
-              href="https://www.ouvre.nyc"
+              href="https://wetmarket.art"
               target="_blank"
               rel="noreferrer"
-              className={`powered-by-ouvre pointer-events-auto absolute bottom-4 left-4 text-xs tracking-[0.04em] text-white hover:opacity-85 transition-opacity ${spaceGrotesk.className}`}
+              className={`powered-by-wet-market pointer-events-auto absolute bottom-4 left-4 text-xs tracking-[0.04em] text-white hover:opacity-85 transition-opacity ${spaceGrotesk.className}`}
             >
-              powered by ouvre
+              powered by wet market
             </a>
           </div>
         </div>

@@ -36,7 +36,7 @@ async function scanKeys(pattern: string): Promise<string[]> {
 }
 
 async function main() {
-  console.log("=== OuvreNFC KV Debug-Data Reset ===\n");
+  console.log("=== wet market NFC KV Debug-Data Reset ===\n");
 
   // 1. Delete all user:* keys
   const userKeys = await scanKeys("user:*");

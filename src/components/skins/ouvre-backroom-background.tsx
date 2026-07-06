@@ -2,7 +2,7 @@ import React from "react";
 
 /**
  * Shared "backroom" background used by:
- * - initialize-ouvre welcome screen (logo/start screen background)
+ * - initialize-wet-market welcome screen (logo/start screen background)
  * - owner-access password screen background
  *
  * NOTE: This component renders ONLY background/effects (no buttons/UI controls).

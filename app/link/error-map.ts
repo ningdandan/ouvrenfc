@@ -13,9 +13,9 @@ export function getErrorMessage(code: ActionErrorCode, fallback?: string): strin
     case "UNAUTHORIZED":
       return "Authentication failed. Please verify the PIN.";
     case "NOT_FOUND":
-      return "Ouvre data not found.";
+      return "wet market data not found.";
     case "ALREADY_EXISTS":
-      return "This ouvre is already activated.";
+      return "This wet market is already activated.";
     case "CONFIG_ERROR":
       return "Server auth config is missing. Please contact support.";
     case "KV_TIMEOUT":

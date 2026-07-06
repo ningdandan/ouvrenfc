@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/activate/:id",
+      "destination": "https://wetmarket.art/fan/activate/:id",
+      "permanent": true
+    },
+    {
+      "source": "/:username((?!activate$)(?!.*\\.).*)",
+      "destination": "https://wetmarket.art/fan/:username",
+      "permanent": true
+    }
+  ]
+}
