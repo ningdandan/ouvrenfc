@@ -16,6 +16,17 @@
       "has": [
         {
           "type": "host",
+          "value": "link.ouvre.nyc"
+        }
+      ],
+      "destination": "https://fan.wetmarket.art/activate/:id",
+      "permanent": true
+    },
+    {
+      "source": "/activate/:id",
+      "has": [
+        {
+          "type": "host",
           "value": "www.wetmarket.art"
         }
       ],
@@ -39,6 +50,17 @@
         {
           "type": "host",
           "value": "www.wetmarket.art"
+        }
+      ],
+      "destination": "https://fan.wetmarket.art/:username",
+      "permanent": true
+    },
+    {
+      "source": "/:username((?!activate$)(?!.*\\.).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "link.ouvre.nyc"
         }
       ],
       "destination": "https://fan.wetmarket.art/:username",
